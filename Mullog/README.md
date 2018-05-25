@@ -32,6 +32,13 @@ Mullog.info("hi");
 ...
 ```
 
+### format
+> %t = date
+ %l = log level
+ %m = method name
+ %c = class name
+ %M = message
+
 ### customize appender
 You can customize your own appender by implementing interface: <b>org.luncert.Mullog.appender.Appender</b>
 ```
