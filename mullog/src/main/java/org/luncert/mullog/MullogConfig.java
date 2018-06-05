@@ -1,5 +1,8 @@
 package org.luncert.mullog;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -14,8 +17,8 @@ import org.luncert.mullog.formatter.Formatter;
 public class MullogConfig {
 
     public static void autoConfig() {
-        InputStream in = MullogConfig.class.getClassLoader().getResourceAsStream("mullog.properties");
-        if (in != null) {
+		try {
+			InputStream in = new FileInputStream(new File(System.getProperty("user.dir") + "/src/main/resources/mullog.properties"));
             Map<String, Properties> confs = new HashMap<>();
             Properties props = new Properties();
             try {
@@ -52,9 +55,11 @@ public class MullogConfig {
 					}
                 }
 			} catch (IOException e) {
-				e.printStackTrace();
+                throw new RuntimeException(e);
 			}
-        } else throw new RuntimeException("Connot find 'mullog.properties', please check resources directory.");
+		} catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+		}
     }
 
 }

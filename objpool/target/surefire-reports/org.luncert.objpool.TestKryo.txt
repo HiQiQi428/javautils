@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: org.luncert.mullog.TestMullog
+Test set: org.luncert.objpool.TestKryo
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.008 s - in org.luncert.mullog.TestMullog
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.02 s - in org.luncert.objpool.TestKryo

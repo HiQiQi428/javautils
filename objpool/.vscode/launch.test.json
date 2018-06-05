@@ -1,0 +1,28 @@
+{
+    "run": {
+        "default": "",
+        "items": [
+            {
+                "name": "Objpool",
+                "projectName": "Objpool",
+                "workingDirectory": "/home/lijingwei/github/javautils/objpool",
+                "args": [],
+                "vmargs": [],
+                "preLaunchTask": ""
+            }
+        ]
+    },
+    "debug": {
+        "default": "",
+        "items": [
+            {
+                "name": "Objpool",
+                "projectName": "Objpool",
+                "workingDirectory": "/home/lijingwei/github/javautils/objpool",
+                "args": [],
+                "vmargs": [],
+                "preLaunchTask": ""
+            }
+        ]
+    }
+}

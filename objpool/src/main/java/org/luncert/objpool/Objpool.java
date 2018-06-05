@@ -1,4 +1,4 @@
-package Objpool;
+package org.luncert.objpool;
 
 import java.io.IOException;
 import java.net.ServerSocket;

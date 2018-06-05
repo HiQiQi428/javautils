@@ -24,13 +24,23 @@ public final class Mullog implements Serializable {
 
     public static void info(String message) { log(MULLOG_INFO, message); }
 
+    public static void info(Object message) { log(MULLOG_INFO, String.valueOf(message)); }
+
     public static void warn(String message) { log(MULLOG_WARN, message); }
+    
+    public static void warn(Object message) { log(MULLOG_WARN, String.valueOf(message)); }
 
     public static void debug(String message) { log(MULLOG_DEBUG, message); }
 
+    public static void debug(Object message) { log(MULLOG_DEBUG, String.valueOf(message)); }
+    
     public static void error(String message) { log(MULLOG_ERROR, message); }
 
+    public static void error(Object message) { log(MULLOG_ERROR, String.valueOf(message)); }
+
     public static void fatal(String message) { log(MULLOG_FATAL, message); }
+
+    public static void fatal(Object message) { log(MULLOG_FATAL, String.valueOf(message)); }
 
     private static void log(int logLevel, String message) {
         if (mullogManager.getAppender().size() == 0) MullogConfig.autoConfig();

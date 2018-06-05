@@ -1,0 +1,28 @@
+{
+    "run": {
+        "default": "",
+        "items": [
+            {
+                "name": "datastruct",
+                "projectName": "datastruct",
+                "workingDirectory": "/home/lijingwei/github/javautils/datastruct",
+                "args": [],
+                "vmargs": [],
+                "preLaunchTask": ""
+            }
+        ]
+    },
+    "debug": {
+        "default": "",
+        "items": [
+            {
+                "name": "datastruct",
+                "projectName": "datastruct",
+                "workingDirectory": "/home/lijingwei/github/javautils/datastruct",
+                "args": [],
+                "vmargs": [],
+                "preLaunchTask": ""
+            }
+        ]
+    }
+}

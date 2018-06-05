@@ -7,7 +7,6 @@ import java.io.IOException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.luncert.jrequest.html.HTMLResolver;
 
 @RunWith(JUnit4.class)
 public class TestHTMLResolver {
@@ -20,8 +19,7 @@ public class TestHTMLResolver {
         // in.read(buf);
         // in.close();
 
-        HTMLResolver resolver = new HTMLResolver();
-        resolver.resolve("<div name=\"youTable\">");
+        Document doc = Document.resolve("");
     }
 
 }
