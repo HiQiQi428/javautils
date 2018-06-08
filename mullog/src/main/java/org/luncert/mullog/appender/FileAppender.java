@@ -5,11 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Properties;
 
-import org.luncert.mullog.formatter.Formatter;
-
-public final class FileAppender implements Appender {
-
-	private Formatter formatter;
+public final class FileAppender extends StandardAppender {
 
 	private int logFileId = 0;
 
@@ -30,33 +26,18 @@ public final class FileAppender implements Appender {
 	public void setMaxSize(int maxSize) { this.maxSize = maxSize; }
 
 	@Override
-	public void log(int logLevel, String message) throws Exception { output(formatter.format(logLevel, message)); }
-
-	@Override
-	public Appender setFormatter(Formatter formatter) {
-		this.formatter = formatter;
-		return this;
-	}
-
-	@Override
-	public void finalize() {
-		out.close();
-	}
-
-	private void output(String data) throws Exception {
-		if (beMaxSize()) {
+	public void log(int logLevel, String ... fields) throws Exception {
+		if (logFile.length() < maxSize) {
 			out.close();
 			logFile = new File(logFile.getAbsolutePath() + "-" + logFileId);
 			logFileId++;
 			out = new PrintWriter(logFile);
 		}
-		out.write(data);
+		out.write(format(logLevel, fields));
 		out.flush();
 	}
 
-	private boolean beMaxSize() {
-		if (logFile.length() < maxSize) return false;
-		else return true;
-	}
+	@Override
+	public void finalize() { out.close(); }
 
 }

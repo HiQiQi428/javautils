@@ -1,6 +1,5 @@
 package org.luncert.mullog.appender;
 
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -8,11 +7,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Properties;
 
-import org.luncert.mullog.formatter.Formatter;
-
-public final class UDPAppender implements Appender {
-
-	private Formatter formatter;
+public final class UDPAppender extends StandardAppender {
 
 	private DatagramSocket udp;
 
@@ -28,26 +23,14 @@ public final class UDPAppender implements Appender {
 		this.port = port;
 	}
 	
-	private void output(String data) throws IOException {
+	@Override
+	public void log(int logLevel, String ... fields) throws Exception {
+		String data = format(logLevel, fields);
 		byte[] buf = data.getBytes();
 		udp.send(new DatagramPacket(buf, buf.length, addr, port));
 	}
 
 	@Override
-	public Appender setFormatter(Formatter formatter) {
-		this.formatter = formatter;
-		return this;
-	}
-
-	@Override
-	public void log(int logLevel, String message) throws Exception {
-		if (formatter == null) throw new Exception("no formatter set");
-		output(formatter.format(logLevel, message));
-	}
-
-	@Override
-	public void finalize() {
-		udp.close();
-	}
+	public void finalize() { udp.close(); }
 	
 }

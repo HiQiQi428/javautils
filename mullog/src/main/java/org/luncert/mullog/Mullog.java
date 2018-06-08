@@ -8,6 +8,8 @@ public final class Mullog implements Serializable {
 
     private static final long serialVersionUID = 3437274876191224782L;
 
+    public static final String[] MULLOG_LEVEL = {"INFO", "WARN", "DEBUG", "ERROR", "FATAL"};
+
     protected static final int MULLOG_INFO = 0;
 
     protected static final int MULLOG_WARN = 1;
@@ -22,31 +24,24 @@ public final class Mullog implements Serializable {
 
     private static final MullogManager mullogManager = MullogManager.getInstance();
 
-    public static void info(String message) { log(MULLOG_INFO, message); }
+    public static void info(Object... fields) { log(MULLOG_INFO, fields); }
 
-    public static void info(Object message) { log(MULLOG_INFO, String.valueOf(message)); }
-
-    public static void warn(String message) { log(MULLOG_WARN, message); }
+    public static void warn(Object... fields) { log(MULLOG_WARN, fields); }
     
-    public static void warn(Object message) { log(MULLOG_WARN, String.valueOf(message)); }
-
-    public static void debug(String message) { log(MULLOG_DEBUG, message); }
-
-    public static void debug(Object message) { log(MULLOG_DEBUG, String.valueOf(message)); }
+    public static void debug(Object... fields) { log(MULLOG_DEBUG, fields); }
     
-    public static void error(String message) { log(MULLOG_ERROR, message); }
+    public static void error(Object... fields) { log(MULLOG_ERROR, fields); }
 
-    public static void error(Object message) { log(MULLOG_ERROR, String.valueOf(message)); }
+    public static void fatal(Object... fields) { log(MULLOG_FATAL, fields); }
 
-    public static void fatal(String message) { log(MULLOG_FATAL, message); }
+    private static void log(int logLevel, Object... fields) {
+        String[] fs = new String[fields.length];
+        for (int i = 0, limit = fields.length; i < limit; i++) fs[i] = String.valueOf(fields[i]);
 
-    public static void fatal(Object message) { log(MULLOG_FATAL, String.valueOf(message)); }
-
-    private static void log(int logLevel, String message) {
         if (mullogManager.getAppender().size() == 0) MullogConfig.autoConfig();
         for (Appender appender : mullogManager.getAppender()) {
             try {
-                appender.log(logLevel, message);
+                appender.log(logLevel, fs);
             } catch(Exception e) {
                 System.out.println(e);
             }

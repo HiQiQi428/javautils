@@ -1,11 +1,16 @@
 package org.luncert.mullog.appender;
 
-import org.luncert.mullog.formatter.Formatter;
-
 public interface Appender {
 
-    public void log(int logLevel, String message) throws Exception;
+    /**
+     * @param logLevel
+     * @param fields
+     */
+    public void log(int logLevel, String... fields) throws Exception;
 
-	public Appender setFormatter(Formatter formatter);
+    /**
+     * @param formatString
+     */
+	public void setFormatString(String formatString);
 
 }

@@ -1,6 +1,6 @@
 /home/lijingwei/github/javautils/mullog/src/main/java/org/luncert/mullog/appender/Appender.java
 /home/lijingwei/github/javautils/mullog/src/main/java/org/luncert/mullog/Mullog.java
-/home/lijingwei/github/javautils/mullog/src/main/java/org/luncert/mullog/formatter/Formatter.java
+/home/lijingwei/github/javautils/mullog/src/main/java/org/luncert/mullog/appender/StandardAppender.java
 /home/lijingwei/github/javautils/mullog/src/main/java/org/luncert/mullog/appender/UDPAppender.java
 /home/lijingwei/github/javautils/mullog/src/main/java/org/luncert/mullog/MullogConfig.java
 /home/lijingwei/github/javautils/mullog/src/main/java/org/luncert/mullog/exception/ConfigNotFoundException.java

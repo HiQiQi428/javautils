@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.luncert.mullog.appender.Appender;
-import org.luncert.mullog.formatter.Formatter;
 
 public class MullogConfig {
 
@@ -47,7 +46,7 @@ public class MullogConfig {
                         if (Appender.class.isAssignableFrom(clazz)) {
                             Constructor<?> constructor = clazz.getConstructor(Properties.class);
                             Appender appender = (Appender)constructor.newInstance(subProps);
-                            appender.setFormatter(new Formatter(subProps.getProperty("format")));
+                            appender.setFormatString(subProps.getProperty("format"));
                             MullogManager.getInstance().addAppender(appender);
                         }
 					} catch (ClassNotFoundException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {

@@ -16,13 +16,13 @@
 mullog.udp.type=org.luncert.mullog.appender.UDPAppender
 mullog.udp.host=localhost
 mullog.udp.port=16000
-mullog.udp.format=%t [%l] {%m} %M
+mullog.udp.format=%T [%L] {%M} %M
 
 mullog.console.type=org.luncert.mullog.appender.ConsoleAppender
-mullog.console.format=%t [%l] {%c:%m} %M
+mullog.console.format=%T [%L] {%C:%M} %M
 
 mullog.file.type=org.luncert.mullog.appender.FileAppender
-mullog.file.format=%t [%l] %M
+mullog.file.format=%T [%L] %S
 ```
 
 > step 3: use Mullog in your code
@@ -33,11 +33,11 @@ Mullog.info("hi");
 ```
 
 ### format
-> * %t = date
-> * %l = log level
-> * %m = method name
-> * %c = class name
-> * %M = message
+> * %T = date
+> * %L = log level
+> * %M = method name
+> * %C = class name
+> * %S = placeholder
 
 ### customize appender
 You can customize your own appender by implementing interface: <b>org.luncert.mullog.appender.Appender</b>
@@ -47,3 +47,4 @@ public interface Appender {
     public Appender setFormatter(Formatter formatter);
 }
 ```
+then use ```MullogManager.getInstance.addAppender```to add your appender

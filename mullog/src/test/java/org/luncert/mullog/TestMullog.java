@@ -9,7 +9,7 @@ public class TestMullog {
 
     @Test
     public void test() {
-        Mullog.info("HI");
+        Mullog.info("desc", "msg", 1);
     }
 
 }
