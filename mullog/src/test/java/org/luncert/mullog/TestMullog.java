@@ -10,6 +10,7 @@ public class TestMullog {
     @Test
     public void test() {
         Mullog.info("desc", "msg", 1);
+        Mullog.info("desc", "msg", 1);
     }
 
 }

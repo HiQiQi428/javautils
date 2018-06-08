@@ -1,6 +1,7 @@
 package org.luncert.mullog.appender;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -12,33 +13,9 @@ public abstract class StandardAppender implements Appender {
     
     private static final String RE_FORMAT_STRING = "%[T|L|M|C|S]";
 
-    protected Matcher matcher;
-
     protected String formatString;
 
     protected int logLevel;
-
-    /**
-     * 我实现的format方法，完成配置文件formatString到log参数的映射
-     */
-    protected String format(int logLevel, String ... fields) {
-        StackTraceElement stackTraceElement = new Throwable().getStackTrace()[4];
-        StringBuilder ret = new StringBuilder();
-        for (int i = 0, lastMatch = 0, limit = fields.length; matcher.find();) {
-            String part = matcher.group(0);
-            if (lastMatch != matcher.start()) ret.append(formatString.subSequence(lastMatch, matcher.start()));
-            if (part.charAt(1) == 'T') ret.append(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
-            else if (part.charAt(1) == 'L') ret.append(Mullog.MULLOG_LEVEL[logLevel]);
-            else if (part.charAt(1) == 'M') ret.append(stackTraceElement.getMethodName());
-            else if (part.charAt(1) == 'C') ret.append(stackTraceElement.getClassName());
-            else if (part.charAt(1) == 'S' && i < limit) {
-                ret.append(fields[i]);
-                i++;
-            }
-            lastMatch = matcher.end();
-        }
-        return ret.toString();
-    }
 
     public StandardAppender(Properties props) {
         String level = props.getProperty("level");
@@ -56,6 +33,32 @@ public abstract class StandardAppender implements Appender {
 
     public boolean isErrorAllowed() { return logLevel <= Mullog.MULLOG_ERROR; }
 
+    /**
+     * 我实现的format方法，完成配置文件formatString到log参数的映射
+     */
+    protected String format(int logLevel, String ... fields) {
+        Pattern r = Pattern.compile(RE_FORMAT_STRING);
+        Matcher matcher = r.matcher(formatString);
+
+        StackTraceElement stackTraceElement = new Throwable().getStackTrace()[4];
+        StringBuilder ret = new StringBuilder();
+        
+        for (int i = 0, lastMatch = 0, limit = fields.length; matcher.find();) {
+            String part = matcher.group(0);
+            if (lastMatch != matcher.start()) ret.append(formatString.subSequence(lastMatch, matcher.start()));
+            if (part.charAt(1) == 'T') ret.append(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
+            else if (part.charAt(1) == 'L') ret.append(Mullog.MULLOG_LEVEL[logLevel]);
+            else if (part.charAt(1) == 'M') ret.append(stackTraceElement.getMethodName());
+            else if (part.charAt(1) == 'C') ret.append(stackTraceElement.getClassName());
+            else if (part.charAt(1) == 'S' && i < limit) {
+                ret.append(fields[i]);
+                i++;
+            }
+            lastMatch = matcher.end();
+        }
+        return ret.toString();
+    }
+
     protected abstract void output(String data) throws Exception;
 
 	@Override
@@ -64,10 +67,6 @@ public abstract class StandardAppender implements Appender {
     }
 
 	@Override
-	public void setFormatString(String formatString) {
-        this.formatString = formatString;
-        Pattern r = Pattern.compile(RE_FORMAT_STRING);
-        matcher = r.matcher(formatString);
-	}
+	public void setFormatString(String formatString) { this.formatString = formatString; }
 
 }
