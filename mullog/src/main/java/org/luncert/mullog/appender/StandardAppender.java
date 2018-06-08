@@ -2,6 +2,7 @@ package org.luncert.mullog.appender;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,9 +12,11 @@ public abstract class StandardAppender implements Appender {
     
     private static final String RE_FORMAT_STRING = "%[T|L|M|C|S]";
 
-    private Matcher matcher;
+    protected Matcher matcher;
 
-    private String formatString;
+    protected String formatString;
+
+    protected int logLevel;
 
     /**
      * 我实现的format方法，完成配置文件formatString到log参数的映射
@@ -37,8 +40,28 @@ public abstract class StandardAppender implements Appender {
         return ret.toString();
     }
 
+    public StandardAppender(Properties props) {
+        String level = props.getProperty("level");
+        for (int i = 0; i < Mullog.MULLOG_LEVEL.length; i++) {
+            if (level.compareTo(Mullog.MULLOG_LEVEL[i]) == 0)
+                this.logLevel = i;
+        }
+    }
+
+    public boolean isDebugAllowed() { return logLevel <= Mullog.MULLOG_DEBUG; }
+
+    public boolean isInfoAllowed() { return logLevel <= Mullog.MULLOG_INFO; }
+
+    public boolean isWarnAllowed() { return logLevel <= Mullog.MULLOG_WARN; }
+
+    public boolean isErrorAllowed() { return logLevel <= Mullog.MULLOG_ERROR; }
+
+    protected abstract void output(String data) throws Exception;
+
 	@Override
-	public abstract void log(int logLevel, String... fields) throws Exception;
+	public void log(int logLevel, String... fields) throws Exception {
+        if (this.logLevel <= logLevel) output(format(logLevel, fields));
+    }
 
 	@Override
 	public void setFormatString(String formatString) {

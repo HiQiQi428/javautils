@@ -16,6 +16,7 @@ public final class FileAppender extends StandardAppender {
 	private PrintWriter out;
 
 	public FileAppender(Properties props) throws FileNotFoundException {
+		super(props);
 		this.logFile = new File(props.getProperty("file"));
 		out = new PrintWriter(logFile);
 	}
@@ -24,20 +25,20 @@ public final class FileAppender extends StandardAppender {
 	 * unit = kB; default = 1024kB
 	 */
 	public void setMaxSize(int maxSize) { this.maxSize = maxSize; }
+	
+	@Override
+	public void finalize() { out.close(); }
 
 	@Override
-	public void log(int logLevel, String ... fields) throws Exception {
+	protected void output(String data) throws Exception {
 		if (logFile.length() < maxSize) {
 			out.close();
 			logFile = new File(logFile.getAbsolutePath() + "-" + logFileId);
 			logFileId++;
 			out = new PrintWriter(logFile);
 		}
-		out.write(format(logLevel, fields));
+		out.write(data);
 		out.flush();
 	}
-
-	@Override
-	public void finalize() { out.close(); }
 
 }

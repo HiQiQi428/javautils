@@ -16,21 +16,21 @@ public final class UDPAppender extends StandardAppender {
 	private int port;
 
 	public UDPAppender(Properties props) throws SocketException, UnknownHostException {
+		super(props);
 		InetAddress addr = InetAddress.getByName(props.getProperty("host"));
 		int port = Integer.valueOf(props.getProperty("port"));
 		udp = new DatagramSocket();
 		this.addr = addr;
 		this.port = port;
 	}
-	
-	@Override
-	public void log(int logLevel, String ... fields) throws Exception {
-		String data = format(logLevel, fields);
-		byte[] buf = data.getBytes();
-		udp.send(new DatagramPacket(buf, buf.length, addr, port));
-	}
 
 	@Override
 	public void finalize() { udp.close(); }
+
+	@Override
+	protected void output(String data) throws Exception {
+		byte[] buf = data.getBytes();
+		udp.send(new DatagramPacket(buf, buf.length, addr, port));
+	}
 	
 }

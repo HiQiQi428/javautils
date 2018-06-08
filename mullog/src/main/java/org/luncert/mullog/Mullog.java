@@ -8,17 +8,17 @@ public final class Mullog implements Serializable {
 
     private static final long serialVersionUID = 3437274876191224782L;
 
-    public static final String[] MULLOG_LEVEL = {"INFO", "WARN", "DEBUG", "ERROR", "FATAL"};
+    public static final String[] MULLOG_LEVEL = {"DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
 
-    protected static final int MULLOG_INFO = 0;
+    public static final int MULLOG_DEBUG = 1;
 
-    protected static final int MULLOG_WARN = 1;
+    public static final int MULLOG_INFO = 2;
 
-    protected static final int MULLOG_DEBUG = 2;
-
-    protected static final int MULLOG_ERROR = 3;
+    public static final int MULLOG_WARN = 3;
     
-    protected static final int MULLOG_FATAL = 4;
+    public static final int MULLOG_ERROR = 4;
+    
+    public static final int MULLOG_FATAL = 5;
 
     private Mullog() {}
 

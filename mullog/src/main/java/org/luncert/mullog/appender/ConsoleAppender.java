@@ -4,11 +4,13 @@ import java.util.Properties;
 
 public class ConsoleAppender extends StandardAppender {
 
-	public ConsoleAppender(Properties props) {}
+	public ConsoleAppender(Properties props) {
+		super(props);
+	}
 
 	@Override
-	public void log(int logLevel, String ... fields) throws Exception {
-		System.out.println(format(logLevel, fields));
+	protected void output(String data) throws Exception {
+		System.out.println(data);
 	}
 
 }
