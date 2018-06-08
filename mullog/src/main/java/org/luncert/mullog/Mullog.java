@@ -10,15 +10,15 @@ public final class Mullog implements Serializable {
 
     public static final String[] MULLOG_LEVEL = {"DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
 
-    public static final int MULLOG_DEBUG = 1;
+    public static final int MULLOG_DEBUG = 0;
 
-    public static final int MULLOG_INFO = 2;
+    public static final int MULLOG_INFO = 1;
 
-    public static final int MULLOG_WARN = 3;
+    public static final int MULLOG_WARN = 2;
     
-    public static final int MULLOG_ERROR = 4;
+    public static final int MULLOG_ERROR = 3;
     
-    public static final int MULLOG_FATAL = 5;
+    public static final int MULLOG_FATAL = 4;
 
     private Mullog() {}
 
