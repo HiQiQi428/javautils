@@ -1,7 +1,6 @@
 package org.luncert.mullog.appender;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Matcher;
