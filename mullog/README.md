@@ -13,16 +13,19 @@
 
 > step 2: create 'mullog.properties' in the resources directory
 ```
-mullog.udp.type=org.luncert.mullog.appender.UDPAppender
-mullog.udp.host=localhost
-mullog.udp.port=16000
-mullog.udp.format=%T [%L] {%M} %M
+udp.type=org.luncert.mullog.appender.UDPAppender
+udp.host=localhost
+udp.port=16000
+udp.format=%T [%L] {%M} %M
 
-mullog.console.type=org.luncert.mullog.appender.ConsoleAppender
-mullog.console.format=%T [%L] {%C:%M} %M
+console.type=org.luncert.mullog.appender.ConsoleAppender
+console.format=%T [%L] {%C:%M} %M
 
-mullog.file.type=org.luncert.mullog.appender.FileAppender
-mullog.file.format=%T [%L] %S
+console2.type=org.luncert.mullog.appender.ConsoleAppender
+console2.format=%T [%L] {%C:%M} %M
+
+file.type=org.luncert.mullog.appender.FileAppender
+file.format=%T [%L] %S
 ```
 
 > step 3: use Mullog in your code

@@ -13,6 +13,14 @@ public interface Appender {
      */
     public void setFormatString(String formatString);
     
+    /**
+     * @param logLevel
+     */
     public void setLogLevel(int logLevel);
+
+    /**
+     * @return logLevel
+     */
+    public int getLogLevel();
 
 }

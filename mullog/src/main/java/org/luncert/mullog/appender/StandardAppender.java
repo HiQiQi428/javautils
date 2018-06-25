@@ -19,7 +19,7 @@ public abstract class StandardAppender implements Appender {
     public StandardAppender(Properties props) {
         String level = props.getProperty("level");
         for (int i = 0; i < Mullog.MULLOG_LEVEL.length; i++) {
-            if (level.compareTo(Mullog.MULLOG_LEVEL[i]) == 0)
+            if (level.toUpperCase().compareTo(Mullog.MULLOG_LEVEL[i]) == 0)
                 this.logLevel = i;
         }
     }
@@ -73,5 +73,8 @@ public abstract class StandardAppender implements Appender {
         if (logLevel < Mullog.MULLOG_DEBUG || logLevel > Mullog.MULLOG_FATAL) throw new RuntimeException("invalid log level: " + logLevel);
         else this.logLevel = logLevel;
     }
+
+    @Override
+    public int getLogLevel() { return logLevel; }
 
 }

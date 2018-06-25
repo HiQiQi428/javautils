@@ -47,7 +47,7 @@ public class MullogConfig {
                             Constructor<?> constructor = clazz.getConstructor(Properties.class);
                             Appender appender = (Appender)constructor.newInstance(subProps);
                             appender.setFormatString(subProps.getProperty("format"));
-                            MullogManager.getInstance().addAppender(namespace, appender);
+                            MullogManager.addAppender(namespace, appender);
                         }
 					} catch (ClassNotFoundException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
 						e.printStackTrace();

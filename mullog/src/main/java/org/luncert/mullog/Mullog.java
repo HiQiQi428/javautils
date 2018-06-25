@@ -22,8 +22,6 @@ public final class Mullog implements Serializable {
 
     private Mullog() {}
 
-    private static final MullogManager mullogManager = MullogManager.getInstance();
-
     public static void info(Object... fields) { log(MULLOG_INFO, fields); }
 
     public static void warn(Object... fields) { log(MULLOG_WARN, fields); }
@@ -38,8 +36,8 @@ public final class Mullog implements Serializable {
         String[] fs = new String[fields.length];
         for (int i = 0, limit = fields.length; i < limit; i++) fs[i] = String.valueOf(fields[i]);
 
-        if (mullogManager.getAppenders().size() == 0) MullogConfig.autoConfig();
-        for (Appender appender : mullogManager.getAppenders().values()) {
+        if (MullogManager.getAppenders().size() == 0) MullogConfig.autoConfig();
+        for (Appender appender : MullogManager.getAppenders().values()) {
             try {
                 appender.log(logLevel, fs);
             } catch(Exception e) {
