@@ -66,6 +66,12 @@ public abstract class StandardAppender implements Appender {
     }
 
 	@Override
-	public void setFormatString(String formatString) { this.formatString = formatString; }
+    public void setFormatString(String formatString) { this.formatString = formatString; }
+    
+    @Override
+    public void setLogLevel(int logLevel) {
+        if (logLevel < Mullog.MULLOG_DEBUG || logLevel > Mullog.MULLOG_FATAL) throw new RuntimeException("invalid log level: " + logLevel);
+        else this.logLevel = logLevel;
+    }
 
 }

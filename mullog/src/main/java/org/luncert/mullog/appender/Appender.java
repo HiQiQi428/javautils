@@ -11,6 +11,8 @@ public interface Appender {
     /**
      * @param formatString
      */
-	public void setFormatString(String formatString);
+    public void setFormatString(String formatString);
+    
+    public void setLogLevel(int logLevel);
 
 }
