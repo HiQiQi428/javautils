@@ -1,8 +1,8 @@
 package org.luncert.mullog;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.luncert.mullog.appender.Appender;
 
@@ -10,18 +10,20 @@ public class MullogManager implements Serializable {
 
     private static final long serialVersionUID = 7606646448285009177L;
 
+    private Map<String, Appender> appenders = new HashMap<>();
+
 	protected static MullogManager getInstance() { return MullogManagerInner.INSTANCE; }
 
-    protected void addAppender(Appender appender) { appenders.add(appender); }
+    protected void addAppender(String name, Appender appender) { appenders.put(name, appender); }
 
-    protected List<Appender> getAppender() { return appenders; }
+    protected Map<String, Appender> getAppenders() { return appenders; }
 
-    private List<Appender> appenders = new ArrayList<>();
-    
     private MullogManager() {}
 
     private static class MullogManagerInner {
         private static final MullogManager INSTANCE = new MullogManager(); 
     }
+
+    public Appender getAppender(String name) { return appenders.get(name); }
 
 }

@@ -34,12 +34,12 @@ public final class Mullog implements Serializable {
 
     public static void fatal(Object... fields) { log(MULLOG_FATAL, fields); }
 
-    private static void log(int logLevel, Object... fields) {
+    public static void log(int logLevel, Object... fields) {
         String[] fs = new String[fields.length];
         for (int i = 0, limit = fields.length; i < limit; i++) fs[i] = String.valueOf(fields[i]);
 
-        if (mullogManager.getAppender().size() == 0) MullogConfig.autoConfig();
-        for (Appender appender : mullogManager.getAppender()) {
+        if (mullogManager.getAppenders().size() == 0) MullogConfig.autoConfig();
+        for (Appender appender : mullogManager.getAppenders().values()) {
             try {
                 appender.log(logLevel, fs);
             } catch(Exception e) {
