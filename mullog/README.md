@@ -3,7 +3,9 @@
 
 ![Shippable branch](https://img.shields.io/shippable/5444c5ecb904a4b21567b0ff/master.svg) ![Maven metadata URI](https://img.shields.io/maven-metadata/v/http/central.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml.svg)
 
-### get started
+### Overview
+A logger for java which supports UDP, Console, File and more.
+### Get started
 > step 1: add dependencies to pom.xml
 ```
 <dependency>
@@ -37,14 +39,14 @@ Mullog.info("hi");
 ...
 ```
 
-### format
+### Format
 > * %T = date
 > * %L = log level
 > * %M = method name
 > * %C = class name
 > * %S = placeholder
 
-### customize appender
+### Customize appender
 You can customize your own appender by implementing interface: <b>org.luncert.mullog.appender.Appender</b>
 ```
 public interface Appender {
