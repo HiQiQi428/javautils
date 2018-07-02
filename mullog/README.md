@@ -1,5 +1,7 @@
 
-# Mullog
+# mullog
+
+![Shippable branch](https://img.shields.io/shippable/5444c5ecb904a4b21567b0ff/master.svg) ![Maven metadata URI](https://img.shields.io/maven-metadata/v/http/central.maven.org/maven2/com/google/code/gson/gson/maven-metadata.xml.svg)
 
 ### get started
 > step 1: add dependencies to pom.xml
