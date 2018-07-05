@@ -6,8 +6,6 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.luncert.mullog.Mullog;
-
 public abstract class StandardAppender implements Appender {
     
     private static final String RE_FORMAT_STRING = "%[T|L|M|C|S]";
@@ -18,20 +16,20 @@ public abstract class StandardAppender implements Appender {
 
     public StandardAppender(Properties props) {
         String level = props.getProperty("level");
-        for (int i = 0; i < Mullog.MULLOG_LEVEL.length; i++) {
-            if (level.toUpperCase().compareTo(Mullog.MULLOG_LEVEL[i]) == 0)
+        for (int i = 0; i < MULLOG_LEVEL.length; i++) {
+            if (level.toUpperCase().compareTo(MULLOG_LEVEL[i]) == 0)
                 this.logLevel = i;
         }
         this.formatString = props.getProperty("format");
     }
 
-    public boolean isDebugAllowed() { return logLevel <= Mullog.MULLOG_DEBUG; }
+    public boolean isDebugAllowed() { return logLevel <= MULLOG_DEBUG; }
 
-    public boolean isInfoAllowed() { return logLevel <= Mullog.MULLOG_INFO; }
+    public boolean isInfoAllowed() { return logLevel <= MULLOG_INFO; }
 
-    public boolean isWarnAllowed() { return logLevel <= Mullog.MULLOG_WARN; }
+    public boolean isWarnAllowed() { return logLevel <= MULLOG_WARN; }
 
-    public boolean isErrorAllowed() { return logLevel <= Mullog.MULLOG_ERROR; }
+    public boolean isErrorAllowed() { return logLevel <= MULLOG_ERROR; }
 
     /**
      * 我实现的format方法，完成配置文件formatString到log参数的映射
@@ -47,7 +45,7 @@ public abstract class StandardAppender implements Appender {
             String part = matcher.group(0);
             if (lastMatch != matcher.start()) ret.append(formatString.subSequence(lastMatch, matcher.start()));
             if (part.charAt(1) == 'T') ret.append(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
-            else if (part.charAt(1) == 'L') ret.append(Mullog.MULLOG_LEVEL[logLevel]);
+            else if (part.charAt(1) == 'L') ret.append(MULLOG_LEVEL[logLevel]);
             else if (part.charAt(1) == 'M') ret.append(stackTraceElement.getMethodName());
             else if (part.charAt(1) == 'C') ret.append(stackTraceElement.getClassName());
             else if (part.charAt(1) == 'S' && i < limit) {
@@ -71,7 +69,7 @@ public abstract class StandardAppender implements Appender {
     
     @Override
     public void setLogLevel(int logLevel) {
-        if (logLevel < Mullog.MULLOG_DEBUG || logLevel > Mullog.MULLOG_FATAL) throw new RuntimeException("invalid log level: " + logLevel);
+        if (logLevel < MULLOG_DEBUG || logLevel > MULLOG_FATAL) throw new RuntimeException("invalid log level: " + logLevel);
         else this.logLevel = logLevel;
     }
 
