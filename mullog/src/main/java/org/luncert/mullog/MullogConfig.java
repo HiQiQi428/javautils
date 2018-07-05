@@ -15,7 +15,7 @@ import org.luncert.mullog.appender.Appender;
 
 public class MullogConfig {
 
-    public static void autoConfig() {
+    protected static void autoConfig() {
 		try {
 			InputStream in = new FileInputStream(new File(System.getProperty("user.dir") + "/src/main/resources/mullog.properties"));
             Map<String, Properties> confs = new HashMap<>();
@@ -45,9 +45,7 @@ public class MullogConfig {
                         Class<?> clazz = Class.forName(subProps.getProperty("type"));
                         if (Appender.class.isAssignableFrom(clazz)) {
                             Constructor<?> constructor = clazz.getConstructor(Properties.class);
-                            Appender appender = (Appender)constructor.newInstance(subProps);
-                            appender.setFormatString(subProps.getProperty("format"));
-                            MullogManager.addAppender(namespace, appender);
+                            MullogManager.addAppender(namespace, (Appender)constructor.newInstance(subProps));
                         }
 					} catch (ClassNotFoundException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
 						e.printStackTrace();

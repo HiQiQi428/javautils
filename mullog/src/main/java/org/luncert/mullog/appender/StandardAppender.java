@@ -22,6 +22,7 @@ public abstract class StandardAppender implements Appender {
             if (level.toUpperCase().compareTo(Mullog.MULLOG_LEVEL[i]) == 0)
                 this.logLevel = i;
         }
+        this.formatString = props.getProperty("format");
     }
 
     public boolean isDebugAllowed() { return logLevel <= Mullog.MULLOG_DEBUG; }
