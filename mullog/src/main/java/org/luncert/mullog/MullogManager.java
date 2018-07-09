@@ -61,7 +61,7 @@ public class MullogManager implements Serializable {
                 }
 			} catch (IOException e) { e.printStackTrace(); }
 		} catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
 		}
     }
 
