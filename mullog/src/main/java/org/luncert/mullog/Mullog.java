@@ -17,6 +17,10 @@ public final class Mullog implements Serializable {
      */
     public Mullog() {}
 
+    public Mullog(Object object) {
+        this(object.getClass());
+    }
+
     /**
      * @param object the object reference which creates this logger
      */
