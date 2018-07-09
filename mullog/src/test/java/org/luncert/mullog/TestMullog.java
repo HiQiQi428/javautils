@@ -10,7 +10,7 @@ import org.luncert.mullog.annotation.BindAppender;
 @BindAppender(name = "console1")
 public class TestMullog {
 
-    Mullog mullog = new Mullog(this);
+    Mullog mullog = new Mullog(TestMullog.class);
 
     @Test
     public void test() {

@@ -20,8 +20,8 @@ public final class Mullog implements Serializable {
     /**
      * @param object the object reference which creates this logger
      */
-    public Mullog(Object object) {
-        for (Annotation annotation : object.getClass().getAnnotations()) {
+    public Mullog(Class<?> clazz) {
+        for (Annotation annotation : clazz.getAnnotations()) {
             if (annotation instanceof BindAppender) {
                 String name = ((BindAppender)annotation).name();
                 appender = MullogManager.getAppender(name);
