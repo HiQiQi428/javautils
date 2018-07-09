@@ -1,0 +1,39 @@
+exception-reporting:
+    userId: "dce1a874-569c-0d60-1714-66461c6d20f9"
+core:
+    themes: [
+        "graphite-ui"
+        "seti-monokai"
+    ]
+disabledPackages: []
+editor:
+invisibles: {}
+softWrapAtPreferredLineLength: true
+softWrap: true
+fontFamily: "monoca"
+fontSize: 20
+showIndentGuide: true
+linter:
+    statusBar: "Show all errors"
+minimap:
+    scrollAnimation: true
+tree-view:
+    hideVcsIgnoredFiles: true
+autocomplete-plus: {}
+linter-csslint: {}
+vim-mode: 
+    startInInsertMode: true
+filetype-color:
+    enabled: "true"
+welcome:
+    showOnStartup: true;
+isotope-ui: {}
+file-icons:
+    onChanges: true
+    forceShow: true
+atom-beautify:
+    _analyticsUserId: "cde3641c-d5ee-4ccb-9d45-37f85f7e98e9"
+csslint:
+    validateOnChange: true
+autosave:
+    enabled: true

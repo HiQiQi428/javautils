@@ -35,9 +35,12 @@ file.format=%T [%L] %S
 > step 3: use Mullog in your code
 ```
 ...
-Mullog.info("hi");
+mullog.info("hi");
 ...
 ```
+
+### BindAppender
+see```org.luncert.mullog.TestMullog#test```
 
 ### Format
 > * %T = date
