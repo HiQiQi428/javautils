@@ -15,6 +15,7 @@ public class TestMullog {
     @Test
     public void test() {
         mullog.info("desc", "msg", 1);
+        mullog.setTmpAppender("console2").info("this appender console2");
     }
 
 }

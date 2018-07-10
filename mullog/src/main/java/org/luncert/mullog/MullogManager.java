@@ -53,7 +53,7 @@ public class MullogManager implements Serializable {
                         Class<?> clazz = Class.forName(subProps.getProperty("type"));
                         if (Appender.class.isAssignableFrom(clazz)) {
                             Constructor<?> constructor = clazz.getConstructor(Properties.class);
-                            MullogManager.addAppender(namespace, (Appender)constructor.newInstance(subProps));
+                            appenders.put(namespace, (Appender)constructor.newInstance(subProps));
                         }
 					} catch (ClassNotFoundException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
 						e.printStackTrace();
@@ -69,13 +69,11 @@ public class MullogManager implements Serializable {
         autoConfig();
     }
 
-    public static void addAppender(String name, Appender appender) { appenders.put(name, appender); }
-
     /**
      * get appender by name
      * @return appender or null
      */
-    public static Appender getAppender(String name) { return appenders.get(name); }
+    protected static Appender getAppender(String name) { return appenders.get(name); }
 
     protected static Map<String, Appender> getAppenders() { return appenders; }
 

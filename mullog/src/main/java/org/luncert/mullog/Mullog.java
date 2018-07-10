@@ -12,6 +12,8 @@ public final class Mullog implements Serializable {
 
     private Appender appender;
 
+    private Appender tmpAppender;
+
     /**
      * by this way, no appender is specified
      */
@@ -37,9 +39,13 @@ public final class Mullog implements Serializable {
         // cast Object[] to String[]
         String[] fs = new String[fields.length];
         for (int i = 0, limit = fields.length; i < limit; i++) fs[i] = String.valueOf(fields[i]);
-        // output
+        // log
         try {
-            if (appender != null) appender.log(logLevel, fs);
+            if (tmpAppender != null) {
+                tmpAppender.log(logLevel, fs);
+                tmpAppender = null;
+            }
+            else if (appender != null) appender.log(logLevel, fs);
             else {
                 for (Appender appender : MullogManager.getAppenders().values()) {
                     appender.log(logLevel, fs);
@@ -57,5 +63,14 @@ public final class Mullog implements Serializable {
     public void error(Object... fields) { log(Appender.MULLOG_ERROR, fields); }
 
     public void fatal(Object... fields) { log(Appender.MULLOG_FATAL, fields); }
+
+    public Mullog setTmpAppender(String name) {
+        Appender appender = MullogManager.getAppender(name);
+        if (appender != null) {
+            tmpAppender = appender;
+            return this;
+        }
+        else return null;
+    }
 
 }
