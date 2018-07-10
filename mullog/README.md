@@ -22,14 +22,19 @@ udp.host=localhost
 udp.port=16000
 udp.format=%T [%L] {%M} %M
 
-console.type=org.luncert.mullog.appender.ConsoleAppender
-console.format=%T [%L] {%C:%M} %M
+console1.level=INFO
+console1.type=org.luncert.mullog.appender.ConsoleAppender
+console1.format=<Test console1> %S %S
 
+console2.level=INFO
 console2.type=org.luncert.mullog.appender.ConsoleAppender
-console2.format=%T [%L] {%C:%M} %M
+console2.format=<Test console2> %S %S
 
+file.level=INFO
+file.file=./test.log
 file.type=org.luncert.mullog.appender.FileAppender
-file.format=%T [%L] %S
+file.maxSize=1
+file.format=<Test file> %S %S
 ```
 
 > step 3: use Mullog in your code

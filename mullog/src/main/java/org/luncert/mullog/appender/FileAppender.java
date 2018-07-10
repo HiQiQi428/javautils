@@ -1,9 +1,12 @@
 package org.luncert.mullog.appender;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
 import java.util.Properties;
+
+import org.luncert.mullog.MullogManager;
 
 public final class FileAppender extends StandardAppender {
 
@@ -15,29 +18,30 @@ public final class FileAppender extends StandardAppender {
 
 	private PrintWriter out;
 
-	public FileAppender(Properties props) throws FileNotFoundException {
+	public FileAppender(Properties props) throws IOException {
 		super(props);
-		this.logFile = new File(props.getProperty("file"));
+		String filePath = props.getProperty("file");
+		if (filePath.startsWith(".")) logFile = Paths.get(MullogManager.getConfigPath().getParent().toString(), filePath).toFile();
+		else logFile = new File(filePath);
+		System.out.println(logFile.getPath());
+		if (!logFile.exists()) logFile.createNewFile();
+		if (props.contains("maxSize")) maxSize = Integer.valueOf(props.getProperty("maxSize"));
 		out = new PrintWriter(logFile);
 	}
-
-	/**
-	 * unit = kB; default = 1024kB
-	 */
-	public void setMaxSize(int maxSize) { this.maxSize = maxSize; }
 	
 	@Override
 	public void finalize() { out.close(); }
 
 	@Override
 	protected void output(String data) throws Exception {
-		if (logFile.length() < maxSize) {
+		if (logFile.length() >= maxSize) {
 			out.close();
-			logFile = new File(logFile.getAbsolutePath() + "-" + logFileId);
+			logFile = new File(logFile.getAbsolutePath() + "." + logFileId);
 			logFileId++;
 			out = new PrintWriter(logFile);
 		}
-		out.write(data);
+		out.append(data);
+		out.append('\n');
 		out.flush();
 	}
 

@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,11 +23,16 @@ public class MullogManager implements Serializable {
 
     private static Map<String, Appender> appenders = new HashMap<>();
 
+    private static Path configPath;
+
     private MullogManager() {}
 
-    private static void autoConfig() {
+    private static void loadConfig() {
+        // set config path
+        configPath = Paths.get(System.getProperty("user.dir"), "/src/main/resources/mullog.properties");
+        // load config
 		try {
-			InputStream in = new FileInputStream(new File(System.getProperty("user.dir") + "/src/main/resources/mullog.properties"));
+			InputStream in = new FileInputStream(new File(configPath.toString()));
             Map<String, Properties> confs = new HashMap<>();
             Properties props = new Properties();
             try {
@@ -66,7 +73,7 @@ public class MullogManager implements Serializable {
     }
 
     static {
-        autoConfig();
+        loadConfig();
     }
 
     /**
@@ -76,5 +83,9 @@ public class MullogManager implements Serializable {
     protected static Appender getAppender(String name) { return appenders.get(name); }
 
     protected static Map<String, Appender> getAppenders() { return appenders; }
+
+    public static Path getConfigPath() {
+        return configPath;
+    }
 
 }
