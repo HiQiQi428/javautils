@@ -1,4 +1,2 @@
 org/luncert/datastruct/FibHeap/FibNode.class
-org/luncert/datastruct/Tree/AttrNode.class
-org/luncert/datastruct/Tree/ValueNode.class
 org/luncert/datastruct/FibHeap/FibHeap.class
