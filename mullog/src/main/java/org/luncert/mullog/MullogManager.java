@@ -12,6 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,7 +87,10 @@ public class MullogManager implements Serializable {
      */
     protected static Appender getAppender(String name) { return appenders.get(name); }
 
-    protected static Map<String, Appender> getAppenders() { return appenders; }
+    protected static Collection<Appender> getAppenders() {
+        if (appenders.size() > 0) return appenders.values();
+        else return null;
+    }
 
     public static Path getConfigPath() {
         return configPath;
