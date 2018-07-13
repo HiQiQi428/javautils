@@ -8,6 +8,8 @@ import org.luncert.mullog.Mullog;
 @RunWith(JUnit4.class)
 public class TestFibHeap {
 
+    private Mullog mullog = new Mullog();
+
     private FibHeap<Integer> h = new FibHeap<>();
 
     public void init() {
@@ -21,31 +23,31 @@ public class TestFibHeap {
         init();
 
         FibNode<Integer> min = h.extractMin();
-        Mullog.info(min.key());
+        mullog.info(min.key());
 
-        Mullog.debug(h.size());
-        Mullog.debug(h.root().key());
-        Mullog.debug(h.root().beSingle());
-        Mullog.debug(h.root().child().beSingle());
-        Mullog.debug(h.root().child().key());
-        Mullog.debug(h.root().child().parent().key());
+        mullog.debug(h.size());
+        mullog.debug(h.root().key());
+        mullog.debug(h.root().beSingle());
+        mullog.debug(h.root().child().beSingle());
+        mullog.debug(h.root().child().key());
+        mullog.debug(h.root().child().parent().key());
 
         System.out.println();
         
         min = h.extractMin();
-        Mullog.info(min.key());
+        mullog.info(min.key());
 
-        Mullog.debug(h.size());
-        Mullog.debug(h.root().key());
-        Mullog.debug(h.root().beSingle());
+        mullog.debug(h.size());
+        mullog.debug(h.root().key());
+        mullog.debug(h.root().beSingle());
         // Mullog.debug(h.root().child().beSingle());
         // Mullog.debug(h.root().child().key());
         // Mullog.debug(h.root().child().parent().key());
 
         min = h.extractMin();
-        Mullog.info(min.key());
+        mullog.info(min.key());
 
-        Mullog.info(h.size());
+        mullog.info(h.size());
     }
 
     @Test
@@ -57,7 +59,7 @@ public class TestFibHeap {
         h.decreaseKey(h.root().child(), -10);
 
         FibNode<Integer> min = h.extractMin();
-        Mullog.info(min.key());
+        mullog.info(min.key());
     }
 
     @Test
@@ -68,8 +70,8 @@ public class TestFibHeap {
 
         h.delete(h.root().child());
 
-        Mullog.info(h.size());
-        Mullog.info(h.root().key());
+        mullog.info(h.size());
+        mullog.info(h.root().key());
     }
 
 }

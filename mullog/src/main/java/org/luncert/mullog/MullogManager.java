@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.luncert.mullog.appender.Appender;
+import org.luncert.mullog.exception.MullogException;
 
 public class MullogManager implements Serializable {
 
@@ -57,6 +58,9 @@ public class MullogManager implements Serializable {
                 for (String namespace: confs.keySet()) {
                     Properties subProps = confs.get(namespace);
                     try {
+                        if (subProps.get("level") == null) throw new MullogException("field level must be specified in mullog.properties");
+                        if (subProps.get("type") == null) throw new MullogException("field type must be specified in mullog.properties");
+                        if (subProps.get("format") == null) throw new MullogException("field format must be specified in mullog.properties");
                         Class<?> clazz = Class.forName(subProps.getProperty("type"));
                         if (Appender.class.isAssignableFrom(clazz)) {
                             Constructor<?> constructor = clazz.getConstructor(Properties.class);
