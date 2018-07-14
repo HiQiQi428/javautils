@@ -84,6 +84,8 @@ public class MullogManager implements Serializable {
 
     protected static Map<String, Appender> getAppenders() { return appenders; }
 
+    protected static void addAppender(String name, Appender appender) { appenders.put(name, appender); }
+
     public static Path getConfigPath() {
         return configPath;
     }
