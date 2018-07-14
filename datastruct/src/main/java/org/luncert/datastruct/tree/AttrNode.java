@@ -1,4 +1,4 @@
-package org.luncert.datastruct.Tree;
+package org.luncert.datastruct.tree;
 
 import java.util.ArrayList;
 import java.util.List;

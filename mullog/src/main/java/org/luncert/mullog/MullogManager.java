@@ -12,10 +12,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.luncert.mullog.appender.Appender;
+import org.luncert.mullog.exception.MullogException;
 
 public class MullogManager implements Serializable {
 
@@ -57,6 +59,9 @@ public class MullogManager implements Serializable {
                 for (String namespace: confs.keySet()) {
                     Properties subProps = confs.get(namespace);
                     try {
+                        if (subProps.get("level") == null) throw new MullogException("field level must be specified in mullog.properties");
+                        if (subProps.get("type") == null) throw new MullogException("field type must be specified in mullog.properties");
+                        if (subProps.get("format") == null) throw new MullogException("field format must be specified in mullog.properties");
                         Class<?> clazz = Class.forName(subProps.getProperty("type"));
                         if (Appender.class.isAssignableFrom(clazz)) {
                             Constructor<?> constructor = clazz.getConstructor(Properties.class);
@@ -82,7 +87,10 @@ public class MullogManager implements Serializable {
      */
     protected static Appender getAppender(String name) { return appenders.get(name); }
 
-    protected static Map<String, Appender> getAppenders() { return appenders; }
+    protected static Collection<Appender> getAppenders() {
+        if (appenders.size() > 0) return appenders.values();
+        else return null;
+    }
 
     protected static void addAppender(String name, Appender appender) { appenders.put(name, appender); }
 

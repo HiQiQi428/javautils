@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: org.luncert.mullog.TestMullog
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.046 sec - in org.luncert.mullog.TestMullog
+=======
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.133 sec - in org.luncert.mullog.TestMullog
+>>>>>>> 40ad0d28a3083afd560bab585be5bd78f31c1943

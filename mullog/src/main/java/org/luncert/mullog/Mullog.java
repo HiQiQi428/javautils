@@ -47,7 +47,7 @@ public final class Mullog implements Serializable {
             }
             else if (appender != null) appender.log(logLevel, fs);
             else {
-                for (Appender appender : MullogManager.getAppenders().values()) {
+                for (Appender appender : MullogManager.getAppenders()) {
                     appender.log(logLevel, fs);
                 }
             }
