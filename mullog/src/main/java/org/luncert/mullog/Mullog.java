@@ -73,4 +73,8 @@ public final class Mullog implements Serializable {
         else return null;
     }
 
+    public void addAppender(String name, Appender appender) {
+        MullogManager.addAppender(name, appender);
+    }
+
 }

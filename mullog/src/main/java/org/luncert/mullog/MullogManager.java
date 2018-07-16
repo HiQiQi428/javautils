@@ -87,6 +87,14 @@ public class MullogManager implements Serializable {
         else return null;
     }
 
+<<<<<<< HEAD
     public static Path getConfigPath() { return configPath; }
+=======
+    protected static void addAppender(String name, Appender appender) { appenders.put(name, appender); }
+
+    public static Path getConfigPath() {
+        return configPath;
+    }
+>>>>>>> f6e9189814c2841a75c528667b949adcfa570bb3
 
 }
