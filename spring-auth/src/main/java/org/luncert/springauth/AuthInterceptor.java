@@ -67,7 +67,10 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                 UserProxy userProxy = map.get(authId);
                 if (userProxy != null) {
                     // 判断授权是否过期
-                    if (userProxy.isExpired()) map.remove(authId);
+                    if (userProxy.isExpired()) {
+                        map.remove(authId);
+                        session.removeAttribute("spring-auth-id");
+                    }
                     else {
                         userProxy.updateLastAccessTime();
                         // 验证用户身份
@@ -92,8 +95,12 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
-        String authId = waitingMap.get(Thread.currentThread().getId());
-        if (authId != null) request.getSession().setAttribute("spring-auth-id", authId);
+        long threadId = Thread.currentThread().getId();
+        String authId = waitingMap.get(threadId);
+        if (authId != null) {
+            waitingMap.remove(threadId);
+            request.getSession().setAttribute("spring-auth-id", authId);
+        }
 	}
     
 }
