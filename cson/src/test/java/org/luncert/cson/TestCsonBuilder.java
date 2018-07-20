@@ -15,7 +15,7 @@ public class TestCsonBuilder {
     @Test
     public void test() throws IOException {
         StringBuilder builder = new StringBuilder();
-        InputStream inputStream = TestCsonBuilder.class.getClassLoader().getResourceAsStream("test.cson");
+        InputStream inputStream = TestCsonBuilder.class.getClassLoader().getResourceAsStream("test1.cson");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = reader.readLine()) != null) builder.append(line).append('\n');
@@ -24,7 +24,6 @@ public class TestCsonBuilder {
         CsonBuilder csonBuilder = new CsonBuilder();
         CsonObject csonObject = csonBuilder.build(builder.toString());
         System.out.println(csonObject.toString());
-        System.out.println(csonObject.getInt("luncert"));
     }
 
 }

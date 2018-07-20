@@ -1,6 +1,6 @@
 package org.luncert.cson;
 
-public class Util {
+public class CsonUtil {
 
     private static boolean beNumber(char c) { return 48 <= c && c <= 57; }
 

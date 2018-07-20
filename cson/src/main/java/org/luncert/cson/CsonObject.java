@@ -140,6 +140,23 @@ public final class CsonObject {
             return null;
     }
 
+    /**
+     * if value is number, then return String instance
+     */
+    public Object getObject(String key) {
+        Object obj = map.get(key);
+        if (obj != null) {
+            if (obj instanceof String) {
+                String value = (String)obj;
+                if (CsonUtil.beBool(value)) return Boolean.valueOf(value);
+                // else if (CsonUtil.beNumber(value)) return value;
+                else return value;
+            }
+            else return obj;
+        }
+        else return null;
+    }
+
     public String toString() {
         return toString("");
     }
@@ -163,7 +180,7 @@ public final class CsonObject {
                     builder.append('\n').append(csonObject.toString(indent + '\t'));
             } else {
                 String value = (String) obj;
-                if (Util.beNumber(value) || Util.beBool(value))
+                if (CsonUtil.beNumber(value) || CsonUtil.beBool(value))
                     builder.append(value);
                 else
                     builder.append('"').append(value).append('"');

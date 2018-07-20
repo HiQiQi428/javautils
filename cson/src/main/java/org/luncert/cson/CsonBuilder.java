@@ -5,8 +5,8 @@ public class CsonBuilder {
     String source;
     int size;
     int cursor;
-    int lineNum = 1;
-    int colNum = 1;
+    int lineNum;
+    int colNum;
 
     private boolean beLetter(char c) {
         return 65 <= c && c <= 90 || 97 <= c && c <= 122;
@@ -20,6 +20,11 @@ public class CsonBuilder {
         return cursor >= size;
     }
 
+    private char getChar() {
+        if (outOfLength()) throw new CsonSyntaxError("end of source");
+        else return source.charAt(cursor);
+    }
+
     private void skipSpace() {
         while (!outOfLength() && getChar() == ' ') {
             colNum++;
@@ -28,7 +33,8 @@ public class CsonBuilder {
     }
 
     private void skipNewLine() {
-        if (!outOfLength() && getChar() == '\n') {
+        if (outOfLength()) return;
+        if (getChar() == '\n') {
             colNum = 1;
             lineNum++;
             cursor++;
@@ -86,11 +92,6 @@ public class CsonBuilder {
             cursor++;
         }
         return count;
-    }
-
-    private char getChar() {
-        if (outOfLength()) throw new CsonSyntaxError("end of source");
-        else return source.charAt(cursor);
     }
 
     // syntax
@@ -257,7 +258,10 @@ public class CsonBuilder {
 
     public CsonObject build(String source) {
         this.source = source;
-        this.size = source.length();
+        size = source.length();
+        cursor = 0;
+        lineNum = 1;
+        colNum = 1;
         return object();
     }
 

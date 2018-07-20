@@ -154,7 +154,7 @@ public final class CsonArray {
         for (Object obj : lst) {
             builder.append(indent + '\t');
             String value = (String) obj;
-            if (Util.beNumber(value) || Util.beBool(value))
+            if (CsonUtil.beNumber(value) || CsonUtil.beBool(value))
                 builder.append(value);
             else
                 builder.append('"').append(value).append('"');

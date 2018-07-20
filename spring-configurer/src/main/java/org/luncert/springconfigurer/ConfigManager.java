@@ -8,15 +8,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.StringTokenizer;
 
+import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
+import org.apache.commons.io.monitor.FileAlterationMonitor;
+import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.luncert.cson.CsonBuilder;
-import org.luncert.cson.CsonObject;
 import org.luncert.mullog.Mullog;
 import org.luncert.mullog.annotation.BindAppender;
 import org.springframework.stereotype.Component;
@@ -25,28 +21,35 @@ import net.sf.json.JSONObject;
 
 @Component
 @BindAppender(name = "ConfigManager")
-public class ConfigManager {
+public class ConfigManager extends FileAlterationListenerAdaptor implements ConfigObject {
 
     private Mullog mullog = new Mullog(this);
 
     private String configPath;
 
-    private JSONObject jsonConf;
+    FileAlterationMonitor monitor;
 
-    private CsonObject csonConf;
+    private JsonProxy jsonConf;
 
-    private Properties propConf;
+    private CsonProxy csonConf;
+
+    private PropertiesAdapter propConf;
 
     /**
      * 默认配置文件目录 classpath, user dir
+     * 
      * @throws Exception
      */
     public ConfigManager() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("config.cson");
-        if (url == null) url = Thread.currentThread().getContextClassLoader().getResource("config.json");
-        if (url == null) url = Thread.currentThread().getContextClassLoader().getResource("config.properties");
-        if (url != null) loadConfig(url.toString().replace("file:", ""));
-        else loadConfig(System.getProperty("user.dir"));
+        if (url == null)
+            url = Thread.currentThread().getContextClassLoader().getResource("config.json");
+        if (url == null)
+            url = Thread.currentThread().getContextClassLoader().getResource("config.properties");
+        if (url != null)
+            loadConfig(url.toString().replace("file:", ""));
+        else
+            loadConfig(System.getProperty("user.dir"));
     }
 
     public ConfigManager(String location) throws Exception {
@@ -64,27 +67,30 @@ public class ConfigManager {
                 }
             }
             throw new ConfigurerException("connot find a configuration file in location: " + location);
-        }
-        else loadConfigFile(file);
+        } else
+            loadConfigFile(file);
     }
 
     private void loadConfigFile(File configFile) throws Exception {
         String location = configFile.getPath();
-        if (!configFile.exists()) throw new FileNotFoundException(location);
+        if (!configFile.exists())
+            throw new FileNotFoundException(location);
 
         String name = configFile.getName();
         String type = name.substring(name.lastIndexOf('.') + 1);
 
-        if (type.equals("json")) jsonConf = JSONObject.fromObject(readFile(configFile));
+        if (type.equals("json"))
+            jsonConf = new JsonProxy(JSONObject.fromObject(readFile(configFile)));
         else if (type.equals("cson")) {
             CsonBuilder csonBuilder = new CsonBuilder();
-            csonConf = csonBuilder.build(readFile(configFile));
-        }
-        else if (type.equals("properties")) {
-            propConf = new Properties();
+            csonConf = new CsonProxy(csonBuilder.build(readFile(configFile)));
+        } else if (type.equals("properties")) {
+            propConf = new PropertiesAdapter();
             propConf.load(new FileInputStream(configFile));
-        }
-        else throw new ConfigurerException("unsupported type of configuration file: " + type);
+        } else
+            throw new ConfigurerException("unsupported type of configuration file: " + type);
+
+        configPath = location;
         mullog.info("successed to load config from:", location);
     }
 
@@ -93,79 +99,83 @@ public class ConfigManager {
         BufferedReader reader = new BufferedReader(inputStreamReader);
         StringBuffer buffer = new StringBuffer();
         String line = null;
-        while ((line = reader.readLine()) != null) buffer.append(line).append("\n");
+        while ((line = reader.readLine()) != null)
+            buffer.append(line).append("\n");
         reader.close();
         return buffer.toString();
     }
 
-    /*
-
-    // write the configuration back to the file
-    private void saveChanges() {
+    private void saveChange() {
+        File file = new File(configPath);
         try {
-            PrintWriter pw = new PrintWriter(configPath);
-            pw.append(configs.toString()).flush();
+            if (!file.exists())
+                file.createNewFile();
+            PrintWriter pw = new PrintWriter(file);
+            pw.append(toString()).flush();
             pw.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-	public void setProperty(String path, String value) {
-        if (path == null || path.equals(":")) return;
-
-        StringTokenizer tokenizer = new StringTokenizer(path, ":");
-        JSONObject tmp = configs;
-
-        while (true) {
-            String name = tokenizer.nextToken();
-            if (!tokenizer.hasMoreTokens()) {
-                tmp.put(name, value);
-                saveChanges();
-                return;
-            }
-            else {
-                if (tmp.has(name)) tmp = tmp.getJSONObject(name);
-                else {
-                    // 由于JSONObject不能存放空的JSONObject，所以只能倒着来
-                    List<String> tokens = new ArrayList<>();
-                    while (tokenizer.hasMoreTokens()) tokens.add(tokenizer.nextToken());
-                    Object v = value;
-                    for (int i = tokens.size() - 1; i >= 0; i--) {
-                        JSONObject jsonObj = new JSONObject();
-                        jsonObj.put(tokens.get(i), v);
-                        v = jsonObj;
-                    }
-                    tmp.put(name, v);
-                    saveChanges();
-                    return;
-                }
-            }
-        }
-	}
-
-	public JSONObject getConfig(String name) {
-		return configs.getJSONObject(name);
-	}
-    */
-
-	public Object getAttribute(String namespace) {
-        if (namespace == null || namespace.equals(":")) return null;
-
-        if (propConf != null) return propConf.getProperty(namespace);
-        else {
-            StringTokenizer tokenizer = new StringTokenizer(namespace, ":");
-            JSONObject tmp = jsonConf;
-            while (true) {
-                String name = tokenizer.nextToken();
-                if (tokenizer.hasMoreTokens()) {
-                    tmp = tmp.getJSONObject(name);
-                    if (tmp == null) return null;
-                }
-                else return tmp.getString(name);
-            }
-        }
-
+    @Deprecated
+    public void startWatchChange() throws Exception {
+        if (monitor != null) stopWatchChange();
+        FileAlterationObserver observer;
+        observer = new FileAlterationObserver(configPath);
+        observer.addListener(this);
+        monitor = new FileAlterationMonitor(1000, observer);
+        monitor.start();
     }
-    
+
+    @Deprecated
+    public void stopWatchChange() {
+        if (monitor != null) {
+            try {
+                monitor.stop();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                monitor = null;
+            }
+        }
+    }
+
+    @Override
+    @Deprecated
+    public void onFileChange(File file) {
+        mullog.error(file.getName());
+    }
+
+    @Override
+    public void setAttribute(String namespace, Object value) {
+        if (propConf != null)
+            propConf.setAttribute(namespace, value);
+        else if (csonConf != null)
+            csonConf.setAttribute(namespace, value);
+        else
+            jsonConf.setAttribute(namespace, value);
+        saveChange();
+    }
+
+    @Override
+    public Object getAttribute(String namespace) {
+        if (propConf != null)
+            return propConf.getAttribute(namespace);
+        else if (csonConf != null)
+            return csonConf.getAttribute(namespace);
+        else
+            return jsonConf.getAttribute(namespace);
+    }
+
+    @Override
+    public String toString() {
+        if (propConf != null)
+            return propConf.toString();
+        else if (csonConf != null)
+            return csonConf.toString();
+        else
+            return jsonConf.toString();
+    }
+
 }
