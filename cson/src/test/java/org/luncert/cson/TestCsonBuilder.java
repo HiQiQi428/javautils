@@ -12,10 +12,6 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class TestCsonBuilder {
 
-    private void print(Object content) {
-        System.out.println(content);
-    }
-
     @Test
     public void test() throws IOException {
         StringBuilder builder = new StringBuilder();
@@ -27,7 +23,8 @@ public class TestCsonBuilder {
 
         CsonBuilder csonBuilder = new CsonBuilder();
         CsonObject csonObject = csonBuilder.build(builder.toString());
-        print(csonObject.toString());
+        System.out.println(csonObject.toString());
+        System.out.println(csonObject.getInt("luncert"));
     }
 
 }

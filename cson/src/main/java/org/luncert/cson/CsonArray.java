@@ -8,98 +8,139 @@ public final class CsonArray {
     List<Object> lst = new ArrayList<>();
 
     public void add(Object value) {
-        if (value instanceof String) lst.add(value);
-        else lst.add(value.toString());
+        if (value instanceof String)
+            lst.add(value);
+        else
+            lst.add(value.toString());
     }
 
-    public void remove(int index) { lst.remove(index); }
-
-    public boolean beEmpty() { return lst.size() == 0; }
-
-    public int getInt(int index) {
-        try {
-            Object obj = lst.get(index);
-            return Integer.valueOf((String)obj);
-        } catch (Exception e) { throw new CsonException(e); }
+    public void remove(int index) {
+        lst.remove(index);
     }
 
-    public int getInt(int index, int defaultValue) {
-        try {
-            Object obj = lst.get(index);
-            return Integer.valueOf((String)obj);
-        } catch (Exception e) { return defaultValue; }
+    public boolean beEmpty() {
+        return lst.size() == 0;
     }
 
-    public long getLong(int index) {
+    public Integer getInt(int index) {
         try {
             Object obj = lst.get(index);
-            return Long.valueOf((String)obj);
-        } catch (Exception e) { throw new CsonException(e); }
+            if (obj instanceof String)
+                return Integer.valueOf((String) obj);
+            else
+                return null;
+        } catch (IndexOutOfBoundsException e) {
+            throw new CsonException("index out of bounds");
+        }
     }
 
-    public long getLong(int index, long defaultValue) {
-        try {
-            Object obj = lst.get(index);
-            return Long.valueOf((String)obj);
-        } catch (Exception e) { return defaultValue; }
+    public Integer getInt(int index, int defaultValue) {
+        Integer value = getInt(index);
+        if (value != null)
+            return value;
+        else
+            return defaultValue;
     }
 
-    public float getFloat(int index) {
+    public Long getLong(int index) {
         try {
             Object obj = lst.get(index);
-            return Float.valueOf((String)obj);
-        } catch (Exception e) { throw new CsonException(e); }
+            if (obj instanceof String)
+                return Long.valueOf((String) obj);
+            else
+                return null;
+        } catch (IndexOutOfBoundsException e) {
+            throw new CsonException("index out of bounds");
+        }
+    }
+
+    public Long getLong(int index, long defaultValue) {
+        Long value = getLong(index);
+        if (value != null)
+            return value;
+        else
+            return defaultValue;
+    }
+
+    public Float getFloat(int index) {
+        try {
+            Object obj = lst.get(index);
+            if (obj instanceof String)
+                return Float.valueOf((String) obj);
+            else
+                return null;
+        } catch (IndexOutOfBoundsException e) {
+            throw new CsonException("index out of bounds");
+        }
 
     }
 
-    public float getFloat(int index, float defaultValue) {
-        try {
-            Object obj = lst.get(index);
-            return Float.valueOf((String)obj);
-        } catch (Exception e) { return defaultValue; }
+    public Float getFloat(int index, float defaultValue) {
+        Float value = getFloat(index);
+        if (value != null)
+            return value;
+        else
+            return defaultValue;
     }
 
-    public double getDouble(int index) {
+    public Double getDouble(int index) {
         try {
             Object obj = lst.get(index);
-            return Double.valueOf((String)obj);
-        } catch (Exception e) { throw new CsonException(e); }
+            if (obj instanceof String)
+                return Double.valueOf((String) obj);
+            else
+                return null;
+        } catch (IndexOutOfBoundsException e) {
+            throw new CsonException("index out of bounds");
+        }
     }
 
-    public double getDouble(int index, double defaultValue) {
-        try {
-            Object obj = lst.get(index);
-            return Double.valueOf((String)obj);
-        } catch (Exception e) { return defaultValue; }
-
+    public Double getDouble(int index, double defaultValue) {
+        Double value = getDouble(index);
+        if (value != null)
+            return value;
+        else
+            return defaultValue;
     }
 
-    public boolean getBoolean(int index) {
+    public Boolean getBoolean(int index) {
         try {
             Object obj = lst.get(index);
-            return Boolean.valueOf((String)obj);
-        } catch (Exception e) { throw new CsonException(e); }
+            if (obj instanceof String)
+                return Boolean.valueOf((String) obj);
+            else
+                return null;
+        } catch (IndexOutOfBoundsException e) {
+            throw new CsonException("index out of bounds");
+        }
     }
 
-    public boolean getBoolean(int index, boolean defaultValue) {
-        try {
-            Object obj = lst.get(index);
-            return Boolean.valueOf((String)obj);
-        } catch (Exception e) { return defaultValue; }
+    public Boolean getBoolean(int index, boolean defaultValue) {
+        Boolean value = getBoolean(index);
+        if (value != null)
+            return value;
+        else
+            return defaultValue;
     }
 
     public String getString(int index) {
         try {
             Object obj = lst.get(index);
-            return (String)obj;
-        } catch (Exception e) { throw new CsonException(e); }
+            if (obj instanceof String)
+                return String.valueOf((String) obj);
+            else
+                return null;
+        } catch (IndexOutOfBoundsException e) {
+            throw new CsonException("index out of bounds");
+        }
     }
 
     public String getString(int index, String defaultValue) {
-        try {
-            Object obj = lst.get(index);
-            return (String)obj;
-        } catch (Exception e) { return defaultValue; }
+        String value = getString(index);
+        if (value != null)
+            return value;
+        else
+            return defaultValue;
     }
 
     public String toString() {
@@ -112,9 +153,11 @@ public final class CsonArray {
         builder.append('[').append('\n');
         for (Object obj : lst) {
             builder.append(indent + '\t');
-            String value = (String)obj;
-            if (Util.beNumber(value) || Util.beBool(value)) builder.append(value);
-            else builder.append('"').append(value).append('"');
+            String value = (String) obj;
+            if (Util.beNumber(value) || Util.beBool(value))
+                builder.append(value);
+            else
+                builder.append('"').append(value).append('"');
             builder.append('\n');
         }
         builder.append(indent).append(']');

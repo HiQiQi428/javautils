@@ -7,112 +7,137 @@ public final class CsonObject {
 
     private Map<String, Object> map = new HashMap<>();
 
-    public boolean hasKey(String key) { return map.containsKey(key); }
+    public boolean hasKey(String key) {
+        return map.containsKey(key);
+    }
 
     public void put(String key, Object value) {
-        if (value == null) throw new CsonException("value connot be null");
-        else if (value instanceof CsonObject || value instanceof CsonArray || value instanceof String) map.put(key, value);
-        else map.put(key, value.toString());
+        if (value == null)
+            throw new CsonException("value connot be null");
+        else if (value instanceof CsonObject || value instanceof CsonArray || value instanceof String)
+            map.put(key, value);
+        else
+            map.put(key, value.toString());
     }
 
-    public void remove(String key) { map.remove(key); }
-
-    public boolean beEmpty() { return map.size() == 0; }
-
-    public int getInt(String key) {
-        Object obj = map.get(key);
-        try { return Integer.valueOf((String)obj); }
-        catch (Exception e) { throw new CsonException(e); }
+    public void remove(String key) {
+        map.remove(key);
     }
 
-    public int getInt(String key, int defaultValue) {
-        Object obj = map.get(key);
-        if (obj != null && obj instanceof String) {
-            try { return Integer.valueOf((String)obj); }
-            catch (Exception e) { return defaultValue; }
-        } else return defaultValue;
+    public boolean beEmpty() {
+        return map.size() == 0;
     }
 
-    public long getLong(String key) {
+    public Integer getInt(String key) {
         Object obj = map.get(key);
-        try { return Long.valueOf((String)obj); }
-        catch(Exception e) { throw new CsonException(e); }
+        if (obj != null && obj instanceof String)
+            return Integer.valueOf((String) obj);
+        else
+            return null;
     }
 
-    public long getLong(String key, long defaultValue) {
-        Object obj = map.get(key);
-        if (obj != null && obj instanceof String) {
-            try { return Long.valueOf((String)obj); }
-            catch (Exception e) { return defaultValue; }
-        } else return defaultValue;
+    public Integer getInt(String key, int defaultValue) {
+        Integer value = getInt(key);
+        if (value != null)
+            return value;
+        else
+            return defaultValue;
     }
 
-    public float getFloat(String key) {
+    public Long getLong(String key) {
         Object obj = map.get(key);
-        try { return Float.valueOf((String)obj); }
-        catch(Exception e) { throw new CsonException(e); }
+        if (obj != null && obj instanceof String)
+            return Long.valueOf((String) obj);
+        else
+            return null;
     }
 
-    public float getFloat(String key, float defaultValue) {
-        Object obj = map.get(key);
-        if (obj != null && obj instanceof String) {
-            try { return Float.valueOf((String)obj); }
-            catch (Exception e) { return defaultValue; }
-        } else return defaultValue;
+    public Long getLong(String key, long defaultValue) {
+        Long value = getLong(key);
+        if (value != null)
+            return value;
+        else
+            return defaultValue;
     }
 
-    public double getDouble(String key) {
+    public Float getFloat(String key) {
         Object obj = map.get(key);
-        try { return Double.valueOf((String)obj); }
-        catch(Exception e) { throw new CsonException(e); }
+        if (obj != null && obj instanceof String)
+            return Float.valueOf((String) obj);
+        else
+            return null;
     }
 
-    public double getDouble(String key, double defaultValue) {
-        Object obj = map.get(key);
-        if (obj != null && obj instanceof String) {
-            try { return Double.valueOf((String)obj); }
-            catch (Exception e) { return defaultValue; }
-        } else return defaultValue;
+    public Float getFloat(String key, float defaultValue) {
+        Float value = getFloat(key);
+        if (value != null)
+            return value;
+        else
+            return defaultValue;
     }
 
-    public boolean getBoolean(String key) {
+    public Double getDouble(String key) {
         Object obj = map.get(key);
-        try { return Boolean.valueOf((String)obj); }
-        catch(Exception e) { throw new CsonException(e); }
+        if (obj != null && obj instanceof String)
+            return Double.valueOf((String) obj);
+        else
+            return null;
     }
 
-    public boolean getBoolean(String key, boolean defaultValue) {
+    public Double getDouble(String key, double defaultValue) {
+        Double value = getDouble(key);
+        if (value != null)
+            return value;
+        else
+            return defaultValue;
+    }
+
+    public Boolean getBoolean(String key) {
         Object obj = map.get(key);
-        if (obj != null && obj instanceof String) {
-            try { return Boolean.valueOf((String)obj); }
-            catch (Exception e) { return defaultValue; }
-        } else return defaultValue;
+        if (obj != null && obj instanceof String)
+            return Boolean.valueOf((String) obj);
+        else
+            return null;
+    }
+
+    public Boolean getBoolean(String key, boolean defaultValue) {
+        Boolean value = getBoolean(key);
+        if (value != null)
+            return value;
+        else
+            return defaultValue;
     }
 
     public String getString(String key) {
         Object obj = map.get(key);
-        try { return (String)obj; }
-        catch(Exception e) { throw new CsonException(e); }
+        if (obj != null && obj instanceof String)
+            return (String) obj;
+        else
+            return null;
     }
 
     public String getString(String key, String defaultValue) {
-        Object obj = map.get(key);
-        if (obj != null && obj instanceof String) {
-            try { return (String)obj; }
-            catch (Exception e) { return defaultValue; }
-        } else return defaultValue;
+        String value = getString(key);
+        if (value != null)
+            return value;
+        else
+            return defaultValue;
     }
 
     public CsonObject getCsonObject(String key) {
         Object obj = map.get(key);
-        try { return (CsonObject)obj; }
-        catch(Exception e) { throw new CsonException(e); }
+        if (obj != null && obj instanceof CsonObject)
+            return (CsonObject) obj;
+        else
+            return null;
     }
 
     public CsonArray getCsonArray(String key) {
         Object obj = map.get(key);
-        try { return (CsonArray)obj; }
-        catch(Exception e) { throw new CsonException(e); }
+        if (obj != null && obj instanceof CsonArray)
+            return (CsonArray) obj;
+        else
+            return null;
     }
 
     public String toString() {
@@ -125,19 +150,23 @@ public final class CsonObject {
             builder.append(indent).append(entry.getKey()).append(": ");
             Object obj = entry.getValue();
             if (obj instanceof CsonArray) {
-                CsonArray csonArray = (CsonArray)obj;
-                if (csonArray.beEmpty()) builder.append("[]");
-                else builder.append(csonArray.toString(indent + '\t'));
-            }
-            else if (obj instanceof CsonObject) {
-                CsonObject csonObject = (CsonObject)obj;
-                if (csonObject.beEmpty()) builder.append("{}");
-                else builder.append('\n').append(csonObject.toString(indent + '\t'));
-            }
-            else {
-                String value = (String)obj;
-                if (Util.beNumber(value) || Util.beBool(value)) builder.append(value);
-                else builder.append('"').append(value).append('"');
+                CsonArray csonArray = (CsonArray) obj;
+                if (csonArray.beEmpty())
+                    builder.append("[]");
+                else
+                    builder.append(csonArray.toString(indent + '\t'));
+            } else if (obj instanceof CsonObject) {
+                CsonObject csonObject = (CsonObject) obj;
+                if (csonObject.beEmpty())
+                    builder.append("{}");
+                else
+                    builder.append('\n').append(csonObject.toString(indent + '\t'));
+            } else {
+                String value = (String) obj;
+                if (Util.beNumber(value) || Util.beBool(value))
+                    builder.append(value);
+                else
+                    builder.append('"').append(value).append('"');
             }
             builder.append('\n');
         }

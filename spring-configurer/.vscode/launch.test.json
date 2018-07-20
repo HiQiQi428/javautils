@@ -1,0 +1,30 @@
+{
+    "run": {
+        "default": "",
+        "items": [
+            {
+                "name": "spring-configurer",
+                "projectName": "spring-configurer",
+                "workingDirectory": "/home/luncert/Project/javautils/spring-configurer",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    },
+    "debug": {
+        "default": "",
+        "items": [
+            {
+                "name": "spring-configurer",
+                "projectName": "spring-configurer",
+                "workingDirectory": "/home/luncert/Project/javautils/spring-configurer",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    }
+}
