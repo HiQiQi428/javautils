@@ -1,141 +1,147 @@
 package org.luncert.cson;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class CsonObject {
 
-    private static class Parser {
+    private Map<String, Object> map = new HashMap<>();
 
-        static int row, col;
-    
-        public static CsonObject parse(String content) {
-            CsonObject ret = new CsonObject();
-            CsonObject tmp = ret;
-            
-            row = col = 0;
-            char[] seqs = content.toCharArray();
-            int i = 0, limit = content.length(), depth = 0;
-            while (i < limit) {
-                char c = content.charAt(i);
-                if (c == '\t') {
-                    depth++;
-                }
-                else if (beLetter(c)) {
-                    String key = nextKey(content, i);
-                }
-                else {
-                    i++;
-                }
+    public boolean hasKey(String key) { return map.containsKey(key); }
+
+    public void put(String key, Object value) {
+        if (value == null) throw new CsonException("value connot be null");
+        else if (value instanceof CsonObject || value instanceof CsonArray || value instanceof String) map.put(key, value);
+        else map.put(key, value.toString());
+    }
+
+    public void remove(String key) { map.remove(key); }
+
+    public boolean beEmpty() { return map.size() == 0; }
+
+    public int getInt(String key) {
+        Object obj = map.get(key);
+        try { return Integer.valueOf((String)obj); }
+        catch (Exception e) { throw new CsonException(e); }
+    }
+
+    public int getInt(String key, int defaultValue) {
+        Object obj = map.get(key);
+        if (obj != null && obj instanceof String) {
+            try { return Integer.valueOf((String)obj); }
+            catch (Exception e) { return defaultValue; }
+        } else return defaultValue;
+    }
+
+    public long getLong(String key) {
+        Object obj = map.get(key);
+        try { return Long.valueOf((String)obj); }
+        catch(Exception e) { throw new CsonException(e); }
+    }
+
+    public long getLong(String key, long defaultValue) {
+        Object obj = map.get(key);
+        if (obj != null && obj instanceof String) {
+            try { return Long.valueOf((String)obj); }
+            catch (Exception e) { return defaultValue; }
+        } else return defaultValue;
+    }
+
+    public float getFloat(String key) {
+        Object obj = map.get(key);
+        try { return Float.valueOf((String)obj); }
+        catch(Exception e) { throw new CsonException(e); }
+    }
+
+    public float getFloat(String key, float defaultValue) {
+        Object obj = map.get(key);
+        if (obj != null && obj instanceof String) {
+            try { return Float.valueOf((String)obj); }
+            catch (Exception e) { return defaultValue; }
+        } else return defaultValue;
+    }
+
+    public double getDouble(String key) {
+        Object obj = map.get(key);
+        try { return Double.valueOf((String)obj); }
+        catch(Exception e) { throw new CsonException(e); }
+    }
+
+    public double getDouble(String key, double defaultValue) {
+        Object obj = map.get(key);
+        if (obj != null && obj instanceof String) {
+            try { return Double.valueOf((String)obj); }
+            catch (Exception e) { return defaultValue; }
+        } else return defaultValue;
+    }
+
+    public boolean getBoolean(String key) {
+        Object obj = map.get(key);
+        try { return Boolean.valueOf((String)obj); }
+        catch(Exception e) { throw new CsonException(e); }
+    }
+
+    public boolean getBoolean(String key, boolean defaultValue) {
+        Object obj = map.get(key);
+        if (obj != null && obj instanceof String) {
+            try { return Boolean.valueOf((String)obj); }
+            catch (Exception e) { return defaultValue; }
+        } else return defaultValue;
+    }
+
+    public String getString(String key) {
+        Object obj = map.get(key);
+        try { return (String)obj; }
+        catch(Exception e) { throw new CsonException(e); }
+    }
+
+    public String getString(String key, String defaultValue) {
+        Object obj = map.get(key);
+        if (obj != null && obj instanceof String) {
+            try { return (String)obj; }
+            catch (Exception e) { return defaultValue; }
+        } else return defaultValue;
+    }
+
+    public CsonObject getCsonObject(String key) {
+        Object obj = map.get(key);
+        try { return (CsonObject)obj; }
+        catch(Exception e) { throw new CsonException(e); }
+    }
+
+    public CsonArray getCsonArray(String key) {
+        Object obj = map.get(key);
+        try { return (CsonArray)obj; }
+        catch(Exception e) { throw new CsonException(e); }
+    }
+
+    public String toString() {
+        return toString("");
+    }
+
+    public String toString(String indent) {
+        StringBuilder builder = new StringBuilder();
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            builder.append(indent).append(entry.getKey()).append(": ");
+            Object obj = entry.getValue();
+            if (obj instanceof CsonArray) {
+                CsonArray csonArray = (CsonArray)obj;
+                if (csonArray.beEmpty()) builder.append("[]");
+                else builder.append(csonArray.toString(indent + '\t'));
             }
-    
-            return null;
-        }
-    
-        private static boolean beLetter(char c) {
-            return 65 <= c && c <= 90 || 97 <= c && c <= 122;
-        }
-    
-        private static boolean beValidTokenChar(char c) {
-            return beLetter(c) || c == '_' || c == '-' || c == '@' || c == '#' || c == '$';
-        }
-    
-        private static String nextKey(String src, int start) {
-            int i = start + 1;
-            int limit = src.length();
-            for (; i < limit && beValidTokenChar(src.charAt(i)); i++);
-            if (i == limit) throw new CsonException("end of file");
-            if (src.charAt(i) != ':') throw new CsonException(MessageFormat.format("invalid character at (%d, %d)", row, col));
+            else if (obj instanceof CsonObject) {
+                CsonObject csonObject = (CsonObject)obj;
+                if (csonObject.beEmpty()) builder.append("{}");
+                else builder.append('\n').append(csonObject.toString(indent + '\t'));
+            }
             else {
-                i++; // skip ':'
-                return src.substring(start, i);
+                String value = (String)obj;
+                if (Util.beNumber(value) || Util.beBool(value)) builder.append(value);
+                else builder.append('"').append(value).append('"');
             }
+            builder.append('\n');
         }
-
-    }
-
-	public void setProperty(String path, String value) {
-        if (path == null || path.equals(":")) return;
-
-        StringTokenizer tokenizer = new StringTokenizer(path, ":");
-        JSONObject tmp = configs;
-
-        while (true) {
-            String name = tokenizer.nextToken();
-            if (!tokenizer.hasMoreTokens()) {
-                tmp.put(name, value);
-                return;
-            }
-            else {
-                if (tmp.getJSONObject(name) == null) tmp = tmp.getJSONObject(name);
-                else {
-                    List<String> tokens = new ArrayList<>();
-                    while (tokenizer.hasMoreTokens()) tokens.add(tokenizer.nextToken());
-                    Object v = value;
-                    for (int i = tokens.size() - 1; i >= 0; i--) {
-                        JSONObject jsonObj = new JSONObject();
-                        jsonObj.put(tokens.get(i), v);
-                        v = jsonObj;
-                    }
-                    tmp.put(name, v);
-                    return;
-                }
-            }
-        }
-	}
-
-    public String getString(String path) {
-        if (path == null || path.equals(":")) return null;
-
-        StringTokenizer tokenizer = new StringTokenizer(path, ":");
-        JSONObject tmp = configs;
-        while (true) {
-            String name = tokenizer.nextToken();
-            if (tokenizer.hasMoreTokens()) {
-                tmp = tmp.getJSONObject(name);
-                if (tmp == null) return null;
-            }
-            else return tmp.getString(name);
-        }
-    }
-
-    public int getInt(int index) {
-        return 0;
-    }
-
-    public String serialize() {
-        return null;
-    }
-
-    public <T> T deserialize(Class<T> clazz) {
-        return null;
-    }
-
-    public static CsonObject parse(File file) throws IOException {
-        return parse(new FileInputStream(file));
-    }
-
-    public static CsonObject parse(InputStream inputStream) throws IOException {
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader reader = new BufferedReader(inputStreamReader);
-        StringBuffer buffer = new StringBuffer();
-        String line = null;
-        while ((line = reader.readLine()) != null) buffer.append(line).append("\n");
-        reader.close();
-        return parse(buffer.toString());
-    }
-
-    public static CsonObject parse(String content) {
-        return Parser.parse(content);
+        return builder.substring(0, builder.length() - 1);
     }
 
 }

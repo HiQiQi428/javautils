@@ -1,0 +1,30 @@
+{
+    "run": {
+        "default": "",
+        "items": [
+            {
+                "name": "cson",
+                "projectName": "cson",
+                "workingDirectory": "/home/luncert/Project/javautils/cson",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    },
+    "debug": {
+        "default": "",
+        "items": [
+            {
+                "name": "cson",
+                "projectName": "cson",
+                "workingDirectory": "/home/luncert/Project/javautils/cson",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    }
+}

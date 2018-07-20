@@ -1,4 +1,6 @@
+name: "zhj"
 exception-reporting:
+    x: -901.23
     userId: "dce1a874-569c-0d60-1714-66461c6d20f9"
 core:
     themes: [
@@ -7,12 +9,12 @@ core:
     ]
 disabledPackages: []
 editor:
-invisibles: {}
-softWrapAtPreferredLineLength: true
-softWrap: true
-fontFamily: "monoca"
-fontSize: 20
-showIndentGuide: true
+    invisibles: {}
+    softWrapAtPreferredLineLength: true
+    softWrap: true
+    fontFamily: "monoca"
+    fontSize: 20
+    showIndentGuide: true
 linter:
     statusBar: "Show all errors"
 minimap:
@@ -26,7 +28,7 @@ vim-mode:
 filetype-color:
     enabled: "true"
 welcome:
-    showOnStartup: true;
+    showOnStartup: true
 isotope-ui: {}
 file-icons:
     onChanges: true

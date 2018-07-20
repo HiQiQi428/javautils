@@ -2,9 +2,9 @@ package org.luncert.cson;
 
 class CsonException extends RuntimeException {
 
-    private static final long serialVersionUID = -2711499364027464853L;
-
-	/** Constructs a new runtime exception with {@code null} as its
+    private static final long serialVersionUID = -2711499364027464853L; 
+   
+    /** Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
@@ -77,4 +77,6 @@ class CsonException extends RuntimeException {
                                boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
+
+
 }
