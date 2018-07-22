@@ -3,6 +3,7 @@ package org.luncert.mullog;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -69,7 +70,9 @@ public class MullogManager implements Serializable {
                     e.printStackTrace();
                 }
             }
-        } catch (IOException e) { e.printStackTrace(); }
+        }
+        catch (FileNotFoundException e) { System.out.println("[Mullog] WARN configuration file not found"); }
+        catch (IOException e) { e.printStackTrace(); }
     }
 
     static {
