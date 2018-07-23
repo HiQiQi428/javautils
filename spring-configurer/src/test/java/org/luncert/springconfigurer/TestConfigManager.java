@@ -25,7 +25,7 @@ public class TestConfigManager {
     @Test
     public void test() {
         configManager.setAttribute("school:name:id", 1032);
-        mullog.info(configManager.getAttribute("school:name:id"));
+        mullog.info(configManager.getInteger("school:name:id"));
     }
 
     @After

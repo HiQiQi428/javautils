@@ -28,12 +28,8 @@ public class ConfigManager extends FileAlterationListenerAdaptor implements Conf
     private String configPath;
 
     FileAlterationMonitor monitor;
-
-    private JsonProxy jsonConf;
-
-    private CsonProxy csonConf;
-
-    private PropertiesAdapter propConf;
+    
+    ConfigObject configObject;
 
     /**
      * 默认配置文件目录 classpath, user dir
@@ -60,15 +56,13 @@ public class ConfigManager extends FileAlterationListenerAdaptor implements Conf
         File file = new File(location);
         if (file.isDirectory()) {
             for (File f : file.listFiles()) {
-                mullog.info(f.getName());
                 if (f.isFile() && f.getName().startsWith("config.")) {
                     loadConfigFile(f);
-                    break;
+                    return;
                 }
             }
             throw new ConfigurerException("connot find a configuration file in location: " + location);
-        } else
-            loadConfigFile(file);
+        } else loadConfigFile(file);
     }
 
     private void loadConfigFile(File configFile) throws Exception {
@@ -80,13 +74,14 @@ public class ConfigManager extends FileAlterationListenerAdaptor implements Conf
         String type = name.substring(name.lastIndexOf('.') + 1);
 
         if (type.equals("json"))
-            jsonConf = new JsonProxy(JSONObject.fromObject(readFile(configFile)));
+            configObject = new JsonProxy(JSONObject.fromObject(readFile(configFile)));
         else if (type.equals("cson")) {
             CsonBuilder csonBuilder = new CsonBuilder();
-            csonConf = new CsonProxy(csonBuilder.build(readFile(configFile)));
+            configObject = new CsonProxy(csonBuilder.build(readFile(configFile)));
         } else if (type.equals("properties")) {
-            propConf = new PropertiesAdapter();
-            propConf.load(new FileInputStream(configFile));
+            PropertiesAdapter props = new PropertiesAdapter();
+            props.load(new FileInputStream(configFile));
+            configObject = props;
         } else
             throw new ConfigurerException("unsupported type of configuration file: " + type);
 
@@ -147,35 +142,50 @@ public class ConfigManager extends FileAlterationListenerAdaptor implements Conf
         mullog.error(file.getName());
     }
 
-    @Override
+	@Override
     public void setAttribute(String namespace, Object value) {
-        if (propConf != null)
-            propConf.setAttribute(namespace, value);
-        else if (csonConf != null)
-            csonConf.setAttribute(namespace, value);
-        else
-            jsonConf.setAttribute(namespace, value);
+        configObject.setAttribute(namespace, value);
         saveChange();
     }
 
-    @Override
-    public Object getAttribute(String namespace) {
-        if (propConf != null)
-            return propConf.getAttribute(namespace);
-        else if (csonConf != null)
-            return csonConf.getAttribute(namespace);
-        else
-            return jsonConf.getAttribute(namespace);
-    }
+	@Override
+	public Object getAttribute(String namespace) {
+        return configObject.getAttribute(namespace);
+	}
+
+	@Override
+	public String getString(String namespace) {
+        return configObject.getString(namespace);
+	}
+
+	@Override
+	public Boolean getBoolean(String namespace) {
+        return configObject.getBoolean(namespace);
+	}
+
+	@Override
+	public Integer getInteger(String namespace) {
+        return configObject.getInteger(namespace);
+	}
+
+	@Override
+	public Long getLong(String namespace) {
+        return configObject.getLong(namespace);
+	}
+
+	@Override
+	public Double getDouble(String namespace) {
+        return configObject.getDouble(namespace);
+	}
+
+	@Override
+	public Float getFloat(String namespace) {
+        return configObject.getFloat(namespace);
+	}
 
     @Override
     public String toString() {
-        if (propConf != null)
-            return propConf.toString();
-        else if (csonConf != null)
-            return csonConf.toString();
-        else
-            return jsonConf.toString();
+        return configObject.toString();
     }
 
 }

@@ -12,6 +12,8 @@ public class TestPropertiesAdapter {
         PropertiesAdapter pAdapter = new PropertiesAdapter();
         pAdapter.setAttribute("ak", 123);
         pAdapter.setAttribute("wx", "asd");
+        System.out.println(pAdapter.getInteger("wx"));
+        System.out.println(pAdapter.getInteger("ak"));
         System.out.println(pAdapter.toString());
     }
 

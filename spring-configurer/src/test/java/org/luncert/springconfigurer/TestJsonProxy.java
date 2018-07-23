@@ -14,6 +14,7 @@ public class TestJsonProxy {
         JSONObject jsonObject = new JSONObject();
         JsonProxy jsonProxy = new JsonProxy(jsonObject);
         jsonProxy.setAttribute("school:name:id", 13);
+        System.out.println(jsonProxy.getInteger("school:name:id"));
         System.out.println(jsonProxy.toString());
     }
 

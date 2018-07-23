@@ -13,6 +13,7 @@ public class TestCsonProxy {
         CsonObject csonObject = new CsonObject();
         CsonProxy csonProxy = new CsonProxy(csonObject);
         csonProxy.setAttribute("school:name:id", 13);
+        System.out.println(csonProxy.getInteger("school:name:id"));
         System.out.println(csonProxy.toString());
     }
 
