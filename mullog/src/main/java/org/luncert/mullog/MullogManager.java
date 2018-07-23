@@ -3,7 +3,6 @@ package org.luncert.mullog;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -30,13 +29,25 @@ public class MullogManager implements Serializable {
     private static Path configPath;
 
     private static void loadConfig() {
-        // load config
-        String configPath = MullogManager.class.getClassLoader().getResource("mullog.properties").toString().replace("file:", "");
-        MullogManager.configPath = Paths.get(configPath);
+        // 优先从jar文件中获取配置文件
+        File configFile = Paths.get(MullogManager.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "mullog.properties").toFile();
+        if (!configFile.exists()) {
+            configFile = new File(MullogManager.class.getClassLoader().getResource("mullog.properties").getPath());
+        }
+        if (!configFile.exists()) {
+            configFile = Paths.get(System.getProperty("user.dir"), "mullog.properties").toFile();
+        }
+        if (!configFile.exists()) {
+            System.out.println("[Mullog] WARN - configuration file not found");
+            return;
+        }
+        MullogManager.configPath = configFile.toPath();
+        System.out.println("[Mullog] INFO - mullog.properties founded in " + MullogManager.configPath);
+
         Map<String, Properties> confs = new HashMap<>();
         Properties props = new Properties();
         try {
-            InputStream in = new FileInputStream(new File(configPath));
+            InputStream in = new FileInputStream(configFile);
             props.load(in);
             // cast
             for (Object key : props.keySet()) {
@@ -71,7 +82,6 @@ public class MullogManager implements Serializable {
                 }
             }
         }
-        catch (FileNotFoundException e) { System.out.println("[Mullog] WARN configuration file not found"); }
         catch (IOException e) { e.printStackTrace(); }
     }
 

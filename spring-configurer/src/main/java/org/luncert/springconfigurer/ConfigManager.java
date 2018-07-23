@@ -13,17 +13,12 @@ import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.luncert.cson.CsonBuilder;
-import org.luncert.mullog.Mullog;
-import org.luncert.mullog.annotation.BindAppender;
 import org.springframework.stereotype.Component;
 
 import net.sf.json.JSONObject;
 
 @Component
-@BindAppender(name = "ConfigManager")
 public class ConfigManager extends FileAlterationListenerAdaptor implements ConfigObject {
-
-    private Mullog mullog = new Mullog(this);
 
     private String configPath;
 
@@ -86,7 +81,7 @@ public class ConfigManager extends FileAlterationListenerAdaptor implements Conf
             throw new ConfigurerException("unsupported type of configuration file: " + type);
 
         configPath = location;
-        mullog.info("successed to load config from:", location);
+        System.out.println("[ConfigManager] INFO successed to load config from " + location);
     }
 
     private String readFile(File file) throws IOException {
@@ -139,7 +134,7 @@ public class ConfigManager extends FileAlterationListenerAdaptor implements Conf
     @Override
     @Deprecated
     public void onFileChange(File file) {
-        mullog.error(file.getName());
+        System.out.println("[ConfigManager] ERROR file change: " + file.getName());
     }
 
 	@Override

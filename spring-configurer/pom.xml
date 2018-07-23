@@ -40,6 +40,7 @@
 			<groupId>org.luncert</groupId>
 			<artifactId>mullog</artifactId>
 			<version>1.0</version>
+			<scope>test</scope>
 		</dependency>
 		<!-- cson -->
 		<dependency>
