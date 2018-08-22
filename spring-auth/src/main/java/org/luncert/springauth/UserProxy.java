@@ -4,29 +4,37 @@ public final class UserProxy {
 
     private int ttl = 300000; // 5min
 
-    private Identity identity;
+    private int accessLevel;
 
     private Long lastAccessTime;
 
     private Object user;
 
-    protected UserProxy(Identity identity, Object user) {
-        this.identity = identity;
+    protected UserProxy(int accessLevel, Object user) {
+        this.accessLevel = accessLevel;
         this.user = user;
         this.lastAccessTime =System.currentTimeMillis();
     }
 
-    protected UserProxy(Identity identity, Object user, int ttl) {
-        this(identity, user);
+    protected UserProxy(int accessLevel, Object user, int ttl) {
+        this(accessLevel, user);
         this.ttl = ttl;
     }
 
-    public boolean isExpired() { return System.currentTimeMillis() - ttl >= lastAccessTime; }
+    public boolean isExpired() {
+        return System.currentTimeMillis() - ttl >= lastAccessTime;
+    }
 
-    public void updateLastAccessTime() { lastAccessTime = System.currentTimeMillis(); }
+    public void updateLastAccessTime() {
+        lastAccessTime = System.currentTimeMillis();
+    }
 
-    public Identity getIdentity() { return identity; }
+    public int getAccessLevel() {
+        return accessLevel;
+    }
 
-    public Object getUser() { return user; }
+    public Object getUser() {
+        return user;
+    }
 
 }

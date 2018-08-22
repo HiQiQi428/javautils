@@ -6,16 +6,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.luncert.springauth.Identity;
-
 @Target(value = ElementType.METHOD)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Documented
 public @interface AuthRequired {
 
     /**
-     * 合法的身份对象，默认值为NormalUser
+     * 访问级别，默认值为 0，允许访问级别大于等于 0 的用户访问
      */
-    Identity[] legalObjects() default Identity.NormalUser;
+    int accessLevel() default 0;
 
 }

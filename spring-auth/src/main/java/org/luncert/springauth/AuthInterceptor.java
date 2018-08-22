@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 
 import org.luncert.simpleutils.ContentType;
 import org.luncert.simpleutils.IOHelper;
-import org.luncert.springauth.Identity;
 import org.luncert.springauth.UserProxy;
 import org.luncert.springauth.annotation.AuthRequired;
 import org.springframework.lang.Nullable;
@@ -41,12 +40,12 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		}
     }
 
-    protected static void grant(Identity identity, Object user) {
-        grant(new UserProxy(identity, user));
+    protected static void grant(int accessLevel, Object user) {
+        grant(new UserProxy(accessLevel, user));
     }
 
-    protected static void grant(Identity identity, Object user, int ttl) {
-        grant(new UserProxy(identity, user, ttl));
+    protected static void grant(int accessLevel, Object user, int ttl) {
+        grant(new UserProxy(accessLevel, user, ttl));
     }
 
     private synchronized static void grant(UserProxy userProxy) {
@@ -80,16 +79,15 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                     }
                     else {
                         userProxy.updateLastAccessTime();
-                        // 验证用户身份
-                        Identity userIdentity = userProxy.getIdentity();
-                        for (Identity identity : authRequired.legalObjects()) {
-                            if (identity.equals(userIdentity)) return true;
+                        // 验证用户访问级别
+                        if (userProxy.getAccessLevel() >= authRequired.accessLevel()) {
+                            return true;
                         }
                     }
                 }
             }
             // authId不存在/授权已过期/不合法的用户身份
-            IOHelper.writeResponse(ContentType.CONTENT_TYPE_HTML, "access rejected", response, true);
+            IOHelper.writeResponse(ContentType.CONTENT_TYPE_HTML, "access rejected".getBytes(), response, true);
             return false;
         }
         else return true;
