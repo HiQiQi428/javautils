@@ -19,9 +19,15 @@ public class UserMethodArgumentResolver implements HandlerMethodArgumentResolver
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+				
 		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 		String authId = (String) request.getSession().getAttribute("spring-auth-id");
-		return AuthInterceptor.getUser(authId);
+		Object user = AuthInterceptor.getUser(authId);
+		Class<?> klass = parameter.getParameterType();
+		if (klass.isAssignableFrom(user.getClass()))
+			return user;
+		else
+			return null;
 	}
 
 }
