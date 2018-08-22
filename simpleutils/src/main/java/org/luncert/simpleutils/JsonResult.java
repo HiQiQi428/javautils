@@ -8,11 +8,23 @@ import net.sf.json.JSONObject;
 
 public class JsonResult {
 
-    public static String build(int statusCode) { return build(statusCode, null, null); }
+    private int statusCode;
+    
+    private String description;
 
-    public static String build(int statusCode, String description) { return build(statusCode, description, null); }
+    private Object data;
 
-    public static String build(int statusCode, String description, Object data) {
+    public JsonResult(int statusCode) { this(statusCode, null, null); }
+
+    public JsonResult(int statusCode, String description) { this(statusCode, description, null); }
+
+    public JsonResult(int statusCode, String description, Object data) {
+        this.statusCode = statusCode;
+        this.description = description;
+        this.data = data;
+    }
+
+    private static String stringify(int statusCode, String description, Object data) {
         JSONObject json = new JSONObject();
         json.put("statusCode", statusCode);
         json.put("description", description);
@@ -27,6 +39,24 @@ public class JsonResult {
         }
         else json.put("data", data);
         return json.toString();
+    }
+
+    @Override
+    public String toString() {
+        return stringify(statusCode, description, data);
+    }
+
+    public static String build(int statusCode) { return build(statusCode, null, null); }
+
+    public static String build(int statusCode, String description) { return build(statusCode, description, null); }
+
+    /**
+     * @param statusCode 状态码
+     * @param description 描述
+     * @param data 数据
+     */
+    public static String build(int statusCode, String description, Object data) {
+        return stringify(statusCode, description, data);
     }
 
 }
