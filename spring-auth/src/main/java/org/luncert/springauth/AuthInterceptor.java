@@ -87,7 +87,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                 }
             }
             // authId不存在/授权已过期/不合法的用户身份
-            IOHelper.writeResponse(ContentType.CONTENT_TYPE_HTML, "access rejected".getBytes(), response, true);
+            IOHelper.writeResponse(ContentType.CONTENT_TYPE_HTML, "-1".getBytes(), response, true);
             return false;
         }
         else return true;
