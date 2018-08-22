@@ -6,25 +6,13 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-public class Result {
+public class JsonResult {
 
-    private int statusCode;
+    public static String build(int statusCode) { return build(statusCode, null, null); }
 
-    private String description;
+    public static String build(int statusCode, String description) { return build(statusCode, description, null); }
 
-    private Object data;
-
-    public Result(int statusCode) { this(statusCode, null, null); }
-
-    public Result(int statusCode, String description) { this(statusCode, description, null); }
-
-    public Result(int statusCode, String description, Object data) {
-        this.statusCode = statusCode;
-        this.description = description;
-        this.data = data;
-    }
-
-    public String toString() {
+    public static String build(int statusCode, String description, Object data) {
         JSONObject json = new JSONObject();
         json.put("statusCode", statusCode);
         json.put("description", description);
