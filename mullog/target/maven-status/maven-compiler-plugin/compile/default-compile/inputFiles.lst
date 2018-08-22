@@ -1,5 +1,4 @@
 /home/luncert/Project/javautils/mullog/src/main/java/org/luncert/mullog/appender/UDPAppender.java
-/home/luncert/Project/javautils/mullog/src/main/java/org/luncert/mullog/annotation/BindAppender.java
 /home/luncert/Project/javautils/mullog/src/main/java/org/luncert/mullog/MullogManager.java
 /home/luncert/Project/javautils/mullog/src/main/java/org/luncert/mullog/appender/ConsoleAppender.java
 /home/luncert/Project/javautils/mullog/src/main/java/org/luncert/mullog/exception/MullogException.java

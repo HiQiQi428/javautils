@@ -1,6 +1,5 @@
 package org.luncert.springauth;
 
-import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -12,9 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.luncert.simpleutils.ContentType;
+import org.luncert.simpleutils.IOHelper;
 import org.luncert.springauth.Identity;
 import org.luncert.springauth.UserProxy;
-import org.luncert.springauth.AuthRequired;
+import org.luncert.springauth.annotation.AuthRequired;
 import org.springframework.lang.Nullable;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -40,13 +41,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		}
     }
 
-    private static void grant(UserProxy userProxy) {
-        String authId = hashcode(new Date().toString());
-        map.put(authId, userProxy);
-        // 一个线程一段时间内只有一个http响应，所以可以根据线程id进行授权
-        waitingMap.put(Thread.currentThread().getId(), authId);
-    }
-
     protected static void grant(Identity identity, Object user) {
         grant(new UserProxy(identity, user));
     }
@@ -54,14 +48,27 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     protected static void grant(Identity identity, Object user, int ttl) {
         grant(new UserProxy(identity, user, ttl));
     }
+
+    private synchronized static void grant(UserProxy userProxy) {
+        String authId = hashcode(new Date().toString());
+        map.put(authId, userProxy);
+        // 一个线程一段时间内只有一个http响应，所以可以根据线程id进行授权
+        waitingMap.put(Thread.currentThread().getId(), authId);
+    }
+
+    protected synchronized static Object getUser(String authId) {
+        UserProxy userProxy = map.get(authId);
+        if (userProxy != null) return userProxy.getUser();
+        else return null;
+    }
     
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (!(handler instanceof HandlerMethod)) return true;
         HandlerMethod methodHandler = (HandlerMethod)handler;
         AuthRequired authRequired = methodHandler.getMethodAnnotation(AuthRequired.class);
+        HttpSession session = request.getSession();
         if (authRequired != null) {
-            HttpSession session = request.getSession();
             String authId = (String)session.getAttribute("spring-auth-id");
             if (authId != null) {
                 UserProxy userProxy = map.get(authId);
@@ -76,25 +83,20 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                         // 验证用户身份
                         Identity userIdentity = userProxy.getIdentity();
                         for (Identity identity : authRequired.legalObjects()) {
-                            if (identity.equals(userIdentity)) {
-                                request.setAttribute("user", userProxy.getUser());
-                                return true;
-                            }
+                            if (identity.equals(userIdentity)) return true;
                         }
                     }
                 }
             }
             // authId不存在/授权已过期/不合法的用户身份
-            try (PrintWriter pw = new PrintWriter(response.getOutputStream())) {
-                pw.append("access rejected").flush();
-            }
+            IOHelper.writeResponse(ContentType.CONTENT_TYPE_HTML, "access rejected", response, true);
             return false;
         }
         else return true;
     }
 
 	@Override
-	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
+	public synchronized void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
         long threadId = Thread.currentThread().getId();
         String authId = waitingMap.get(threadId);
         if (authId != null) {

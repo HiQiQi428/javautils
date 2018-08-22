@@ -1,9 +1,7 @@
 package org.luncert.mullog;
 
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
 
-import org.luncert.mullog.annotation.BindAppender;
 import org.luncert.mullog.appender.Appender;
 
 public final class Mullog implements Serializable {
@@ -19,20 +17,8 @@ public final class Mullog implements Serializable {
      */
     public Mullog() {}
 
-    public Mullog(Object object) {
-        this(object.getClass());
-    }
-
-    /**
-     * @param object the object reference which creates this logger
-     */
-    public Mullog(Class<?> clazz) {
-        for (Annotation annotation : clazz.getAnnotations()) {
-            if (annotation instanceof BindAppender) {
-                String name = ((BindAppender)annotation).name();
-                appender = MullogManager.getAppender(name);
-            }
-        }
+    public Mullog(String name) {
+        appender = MullogManager.getAppender(name);
     }
 
     private void log(int logLevel, Object... fields) {

@@ -24,7 +24,7 @@ public class Result {
         this.data = data;
     }
 
-    public String toJSONString() {
+    public String toString() {
         JSONObject json = new JSONObject();
         json.put("statusCode", statusCode);
         json.put("description", description);

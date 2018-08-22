@@ -2,14 +2,16 @@ package org.luncert.simpleutils;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.Date;
@@ -23,21 +25,42 @@ public class IOHelper {
      * 读输入流
      * @return 内容
      */
-    public static String read(InputStream inputStream) throws IOException {
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader reader = new BufferedReader(inputStreamReader);
-        StringBuffer buffer = new StringBuffer();
-        String line = null;
-        while ((line = reader.readLine()) != null) buffer.append(line).append("\n");
-        reader.close();
-        return buffer.toString();
+    public static byte[] read(InputStream inputStream) throws IOException {
+		BufferedInputStream buffer = null;
+		DataInputStream dataIn = null;
+		ByteArrayOutputStream bos = null;
+		DataOutputStream dos = null;
+		byte[] bArray = null;
+		try {
+			buffer = new BufferedInputStream(inputStream);
+			dataIn = new DataInputStream(buffer);
+			bos = new ByteArrayOutputStream();
+			dos = new DataOutputStream(bos);
+			byte[] buf = new byte[1024];
+			while (true) {
+				int len = dataIn.read(buf);
+				if (len < 0)
+					break;
+				dos.write(buf, 0, len);
+			}
+            bArray = bos.toByteArray();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (dataIn != null) dataIn.close();
+			if (buffer != null) buffer.close();
+			if (bos != null) bos.close();
+			if (dos != null) dos.close();
+		}
+		return bArray;
     }
 
     /**
      * 读文件
      * @return 文件内容
      */
-    public static String read(File file) throws IOException {
+    public static byte[] read(File file) throws IOException {
         return read(new FileInputStream(file));
     }
 
@@ -80,8 +103,7 @@ public class IOHelper {
      * @param response HttpServletResponse
      * @param cors 是否允许跨源访问
      */
-    public static void writeResponse(String contentType, String content, HttpServletResponse response, boolean cors) throws IOException {
-        byte[] data = content.getBytes();
+    public static void writeResponse(String contentType, byte[] data, HttpServletResponse response, boolean cors) throws IOException {
         response.reset();
         // cors
         if (cors) {

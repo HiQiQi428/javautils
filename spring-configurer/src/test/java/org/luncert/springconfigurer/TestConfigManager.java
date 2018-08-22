@@ -5,15 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.luncert.mullog.Mullog;
-import org.luncert.mullog.annotation.BindAppender;
 
 @RunWith(JUnit4.class)
-@BindAppender(name = "Test")
 public class TestConfigManager {
     
-    Mullog mullog = new Mullog(this);
-
     ConfigManager configManager;
 
     @Before
@@ -25,7 +20,7 @@ public class TestConfigManager {
     @Test
     public void test() {
         configManager.setAttribute("school:name:id", 1032);
-        mullog.info(configManager.getInteger("school:name:id"));
+        System.out.println(configManager.getInteger("school:name:id"));
     }
 
     @After

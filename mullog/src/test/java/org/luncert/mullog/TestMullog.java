@@ -4,13 +4,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import org.luncert.mullog.annotation.BindAppender;
 
 @RunWith(JUnit4.class)
-@BindAppender(name = "console1")
 public class TestMullog {
 
-    Mullog mullog = new Mullog(TestMullog.class);
+    Mullog mullog = new Mullog("console1");
 
     @Test
     public void test() {

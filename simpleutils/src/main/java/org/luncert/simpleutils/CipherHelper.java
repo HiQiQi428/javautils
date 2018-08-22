@@ -3,6 +3,7 @@ package org.luncert.simpleutils;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 import java.util.UUID;
 
 public class CipherHelper {
@@ -34,6 +35,18 @@ public class CipherHelper {
             }
         }
         return ret;
+    }
+
+    public static String randomString(int n) {
+        Random random = new Random();
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            int r = random.nextInt(62);
+            if (r < 10) builder.append(r);
+            else if (r < 36) builder.append((char)(r + 55));
+            else builder.append((char)(r + 61));
+        }
+        return builder.toString();
     }
     
 }

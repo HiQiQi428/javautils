@@ -81,7 +81,7 @@ public class ConfigManager extends FileAlterationListenerAdaptor implements Conf
             throw new ConfigurerException("unsupported type of configuration file: " + type);
 
         configPath = location;
-        System.out.println("[ConfigManager] INFO successed to load config from " + location);
+        System.out.println(">> ConfigManager successed to load configuration from " + location);
     }
 
     private String readFile(File file) throws IOException {

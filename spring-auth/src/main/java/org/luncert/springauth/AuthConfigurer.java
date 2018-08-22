@@ -1,7 +1,10 @@
 package org.luncert.springauth;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -26,6 +29,14 @@ public class AuthConfigurer implements WebMvcConfigurer {
 		InterceptorRegistration registration = registry.addInterceptor(authInterceptor());
 		registration.addPathPatterns("/**");
         registration.order(1);
-	}
+    }
+    
+    /**
+     * 配置方法参数解析器: UserMethodArgumentResolver
+     */
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(new UserMethodArgumentResolver());
+    }
 
 }

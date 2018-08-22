@@ -6,4 +6,8 @@ public class AuthManager {
         AuthInterceptor.grant(identity, user);
     }
 
+    public void grant(Identity identity, Object user, int ttl) {
+        AuthInterceptor.grant(identity, user, ttl);
+    }
+
 }
