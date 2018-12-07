@@ -1,9 +1,0 @@
-/home/luncert/Project/javautils/mullog/src/main/java/org/luncert/mullog/appender/UDPAppender.java
-/home/luncert/Project/javautils/mullog/src/main/java/org/luncert/mullog/MullogManager.java
-/home/luncert/Project/javautils/mullog/src/main/java/org/luncert/mullog/appender/ConsoleAppender.java
-/home/luncert/Project/javautils/mullog/src/main/java/org/luncert/mullog/exception/MullogException.java
-/home/luncert/Project/javautils/mullog/src/main/java/org/luncert/mullog/appender/StandardAppender.java
-/home/luncert/Project/javautils/mullog/src/main/java/org/luncert/mullog/Mullog.java
-/home/luncert/Project/javautils/mullog/src/main/java/org/luncert/mullog/appender/FileAppender.java
-/home/luncert/Project/javautils/mullog/src/main/java/org/luncert/mullog/exception/ConfigNotFoundException.java
-/home/luncert/Project/javautils/mullog/src/main/java/org/luncert/mullog/appender/Appender.java

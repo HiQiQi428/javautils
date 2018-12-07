@@ -1,8 +1,11 @@
 package org.luncert.mullog;
 
 import java.io.Serializable;
+import java.nio.file.Path;
+import java.util.Optional;
 
 import org.luncert.mullog.appender.Appender;
+import org.luncert.mullog.exception.MullogException;
 
 public final class Mullog implements Serializable {
 
@@ -10,15 +13,14 @@ public final class Mullog implements Serializable {
 
     private Appender appender;
 
-    private Appender tmpAppender;
-
-    /**
-     * by this way, no appender is specified
-     */
-    public Mullog() {}
-
     public Mullog(String name) {
         appender = MullogManager.getAppender(name);
+        if (appender == null)
+            throw new MullogException("invalid appender name: " + name);
+    }
+
+    public Mullog(Appender appender) {
+        this.appender = appender;
     }
 
     private void log(int logLevel, Object... fields) {
@@ -27,40 +29,34 @@ public final class Mullog implements Serializable {
         for (int i = 0, limit = fields.length; i < limit; i++) fs[i] = String.valueOf(fields[i]);
         // log
         try {
-            if (tmpAppender != null) {
-                tmpAppender.log(logLevel, fs);
-                tmpAppender = null;
-            }
-            else if (appender != null) appender.log(logLevel, fs);
-            else {
-                for (Appender appender : MullogManager.getAppenders()) {
-                    appender.log(logLevel, fs);
-                }
-            }
+            appender.log(logLevel, fs);
         } catch(Exception e) { e.printStackTrace(); }
     }
 
-    public void info(Object... fields) { log(Appender.MULLOG_INFO, fields); }
+    public void info(Object... fields) { log(LogLevel.INFO, fields); }
 
-    public void warn(Object... fields) { log(Appender.MULLOG_WARN, fields); }
+    public void warn(Object... fields) { log(LogLevel.WARN, fields); }
     
-    public void debug(Object... fields) { log(Appender.MULLOG_DEBUG, fields); }
+    public void debug(Object... fields) { log(LogLevel.DEBUG, fields); }
     
-    public void error(Object... fields) { log(Appender.MULLOG_ERROR, fields); }
+    public void error(Object... fields) { log(LogLevel.ERROR, fields); }
 
-    public void fatal(Object... fields) { log(Appender.MULLOG_FATAL, fields); }
+    public void fatal(Object... fields) { log(LogLevel.FATAL, fields); }
 
-    public Mullog setTmpAppender(String name) {
+    public Optional<Mullog> setTmpAppender(String name) {
         Appender appender = MullogManager.getAppender(name);
-        if (appender != null) {
-            tmpAppender = appender;
-            return this;
-        }
-        else return null;
+        Mullog mullog = null;
+        if (appender != null)
+            mullog = new Mullog(appender);
+        return Optional.ofNullable(mullog);
     }
 
     public void addAppender(String name, Appender appender) {
         MullogManager.addAppender(name, appender);
+    }
+
+    public static Path getConfigPath() {
+        return MullogManager.getConfigPath();
     }
 
 }

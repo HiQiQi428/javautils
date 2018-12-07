@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-import org.luncert.mullog.MullogManager;
+import org.luncert.mullog.Mullog;
 
 public final class FileAppender extends StandardAppender {
 
@@ -21,9 +21,9 @@ public final class FileAppender extends StandardAppender {
 	public FileAppender(Properties props) throws IOException {
 		super(props);
 		String filePath = props.getProperty("file");
-		if (filePath.startsWith(".")) logFile = Paths.get(MullogManager.getConfigPath().getParent().toString(), filePath).toFile();
+		if (filePath.startsWith(".")) logFile = Paths.get(Mullog.getConfigPath().getParent().toString(), filePath).toFile();
 		else logFile = new File(filePath);
-		System.out.println(logFile.getPath());
+		// System.out.println(logFile.getPath());
 		if (!logFile.exists()) logFile.createNewFile();
 		if (props.contains("maxSize")) maxSize = Integer.valueOf(props.getProperty("maxSize"));
 		out = new PrintWriter(logFile);

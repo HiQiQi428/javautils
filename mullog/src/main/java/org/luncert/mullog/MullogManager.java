@@ -38,7 +38,7 @@ public class MullogManager implements Serializable {
             configFile = Paths.get(System.getProperty("user.dir"), "mullog.properties").toFile();
         }
         if (!configFile.exists()) {
-            System.out.println(">> WARN - Mullog configuration file not found");
+            System.out.println("! WARN - Mullog configuration file not found");
             return;
         }
         MullogManager.configPath = configFile.toPath();
@@ -82,7 +82,6 @@ public class MullogManager implements Serializable {
             }
         }
         catch (IOException e) { e.printStackTrace(); }
-        System.out.println(">> INFO - Mullog successed to load configuration from " + MullogManager.configPath);
     }
 
     static {
@@ -100,7 +99,7 @@ public class MullogManager implements Serializable {
         else return null;
     }
 
-    public static Path getConfigPath() { return configPath; }
+    protected static Path getConfigPath() { return configPath; }
 
     protected static void addAppender(String name, Appender appender) { appenders.put(name, appender); }
 

@@ -1,8 +1,0 @@
-org/luncert/mullog/appender/StandardAppender.class
-org/luncert/mullog/appender/UDPAppender.class
-org/luncert/mullog/MullogManager.class
-org/luncert/mullog/Mullog.class
-org/luncert/mullog/appender/FileAppender.class
-org/luncert/mullog/appender/ConsoleAppender.class
-org/luncert/mullog/appender/Appender.class
-org/luncert/mullog/exception/ConfigNotFoundException.class
