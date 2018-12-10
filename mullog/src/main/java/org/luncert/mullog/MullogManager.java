@@ -26,10 +26,10 @@ public class MullogManager implements Serializable {
 
     private MullogManager() {}
 
-    private static Path configPath;
+    static Path configPath;
 
     private static void loadConfig() {
-        // 优先从jar文件中获取配置文件
+        // 优先从jar文件中获取配置文件,而不是使用Mullog的用户的工作目录
         File configFile = Paths.get(MullogManager.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "mullog.properties").toFile();
         if (!configFile.exists()) {
             configFile = new File(MullogManager.class.getClassLoader().getResource("mullog.properties").getPath());
@@ -38,7 +38,7 @@ public class MullogManager implements Serializable {
             configFile = Paths.get(System.getProperty("user.dir"), "mullog.properties").toFile();
         }
         if (!configFile.exists()) {
-            System.out.println("! WARN - Mullog configuration file not found");
+            System.out.println("[INFO] Mullog configuration file not found");
             return;
         }
         MullogManager.configPath = configFile.toPath();
@@ -68,9 +68,12 @@ public class MullogManager implements Serializable {
             for (String namespace: confs.keySet()) {
                 Properties subProps = confs.get(namespace);
                 try {
-                    if (subProps.get("level") == null) throw new MullogException("field level must be specified in mullog.properties");
-                    if (subProps.get("type") == null) throw new MullogException("field type must be specified in mullog.properties");
-                    if (subProps.get("format") == null) throw new MullogException("field format must be specified in mullog.properties");
+                    if (subProps.get("level") == null)
+                        throw new MullogException("field level must be specified in mullog.properties");
+                    if (subProps.get("type") == null)
+                        throw new MullogException("field type must be specified in mullog.properties");
+                    if (subProps.get("format") == null)
+                        throw new MullogException("field format must be specified in mullog.properties");
                     Class<?> clazz = Class.forName(subProps.getProperty("type"));
                     if (Appender.class.isAssignableFrom(clazz)) {
                         Constructor<?> constructor = clazz.getConstructor(Properties.class);
@@ -89,18 +92,21 @@ public class MullogManager implements Serializable {
     }
 
     /**
-     * get appender by name
-     * @return appender or null
+     * 添加Appender并指定name
+     * @param name
+     * @param appender
      */
-    protected static Appender getAppender(String name) { return appenders.get(name); }
+    static void addAppender(String name, Appender appender) { appenders.put(name, appender); }
 
-    protected static Collection<Appender> getAppenders() {
+    /**
+     * @param name
+     * @return Nullable Appender
+     */
+    static Appender getAppender(String name) { return appenders.get(name); }
+
+    static Collection<Appender> getAppenders() {
         if (appenders.size() > 0) return appenders.values();
         else return null;
     }
-
-    protected static Path getConfigPath() { return configPath; }
-
-    protected static void addAppender(String name, Appender appender) { appenders.put(name, appender); }
 
 }

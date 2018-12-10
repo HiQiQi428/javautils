@@ -7,12 +7,12 @@ import java.util.regex.Pattern;
 
 public final class Formatter {
 
-    private static final String RE_FORMAT_STRING = "%[T|L|M|C|S]";
+    private static final String RE_FORMAT_STRING = "%[T|L|M|C|t|S]";
     
     private SlotChain slotChain = new SlotChain();
 
     private static enum SlotType {
-        Timestamp, LogLevel, MethodName, ClassName, PlainText, Message
+        Timestamp, LogLevel, MethodName, ClassName, ThreadName, PlainText, Message
     }
 
     private static class Slot {
@@ -51,6 +51,8 @@ public final class Formatter {
             slot = new Slot();
             if (c == 'T')
                 slot.type = SlotType.Timestamp;
+            else if (c == 't')
+                slot.type = SlotType.ThreadName;
             else if (c == 'L')
                 slot.type = SlotType.LogLevel;
             else if (c == 'M')
@@ -72,6 +74,8 @@ public final class Formatter {
         while (slot != null) {
             if (slot.type.equals(SlotType.LogLevel))
                 builder.append(LogLevel.convertString(logLevel));
+            else if (slot.type.equals(SlotType.ThreadName))
+                builder.append(Thread.currentThread().getName());
             else if (slot.type.equals(SlotType.Message)) {
                 if (i < limit)
                     builder.append(fields[i++]);
